@@ -1,0 +1,23 @@
+.image-logo{
+    width: 200px;
+    height: 200px;
+    background-image: url('../../public/logoIF.png');
+    background-size: cover;
+    background-position: center;
+}
+
+@media screen and (max-width: 768px) {
+    .nav{
+        align-items: center;
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .desktop-menu{
+        display: none !important;
+    }
+    .mobile-menu {
+        display: flex !important;
+    }
+}

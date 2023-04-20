@@ -2,11 +2,11 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import Navigator from './components/Nav/nav';
+
 function App() {
   return (
-    <div className="App">
-      <h1>teste</h1>
-    </div>
+    <Navigator/>
   );
 }
 
