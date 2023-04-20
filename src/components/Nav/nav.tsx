@@ -29,13 +29,13 @@ export default function Navigator() {
         <Nav className="me-auto desktop-menu" navbar style={{ width: "90%" }}>
           <NavItem className="d-flex justify-content-between">
             <div className="d-flex gap-3">
-              <NavLink href="/components/">Professores</NavLink>
-              <NavLink href="#">Cursos</NavLink>
-              <NavLink href="#">Turmas</NavLink>
-              <NavLink href="#">Disciplinas</NavLink>
-              <NavLink href="#">Restrições</NavLink>
+              <NavLink href="/professores">Professores</NavLink>
+              <NavLink href="/cursos">Cursos</NavLink>
+              <NavLink href="/turmas">Turmas</NavLink>
+              <NavLink href="/disciplinas">Disciplinas</NavLink>
+              <NavLink href="/restricoes">Restrições</NavLink>
             </div>
-            <NavLink href="#">
+            <NavLink href="/grade">
               <Button color="primary">Gerar grade</Button>
             </NavLink>
           </NavItem>
@@ -48,12 +48,12 @@ export default function Navigator() {
         <Collapse isOpen={isOpen} navbar>
           <div className="d-flex justify-content-center aling-itens-center">
             <Nav navbar>
-              <NavLink href="/components/">Professores</NavLink>
-              <NavLink href="#">Cursos</NavLink>
-              <NavLink href="#">Turmas</NavLink>
-              <NavLink href="#">Disciplinas</NavLink>
-              <NavLink href="#">Restrições</NavLink>
-              <NavLink href="#">
+              <NavLink href="/professores">Professores</NavLink>
+              <NavLink href="/cursos">Cursos</NavLink>
+              <NavLink href="/turmas">Turmas</NavLink>
+              <NavLink href="/disciplinas">Disciplinas</NavLink>
+              <NavLink href="/restricoes">Restrições</NavLink>
+              <NavLink href="/grade">
                 <Button color="primary">Gerar grade</Button>
               </NavLink>
             </Nav>
