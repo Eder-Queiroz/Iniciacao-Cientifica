@@ -1,10 +1,15 @@
 import "./App.css";
-import RouteApp from "./routes";
+import { Outlet } from "react-router-dom";
 
 import Navigator from "./components/Nav/nav";
 
 function App() {
-  return <Navigator />;
+  return (
+    <>
+      <Navigator />
+      <Outlet />
+    </>
+  );
 }
 
 export default App;
