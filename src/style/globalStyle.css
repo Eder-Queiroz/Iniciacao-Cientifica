@@ -6,6 +6,18 @@
     background-position: center;
 }
 
+.react-bootstrap-table{
+    overflow-x:auto !important;
+}
+
+.sr-only {
+    display: none;
+}
+
+.filter-table {
+    margin-left: 1rem;
+}
+
 @media screen and (max-width: 768px) {
     .nav{
         align-items: center;
@@ -14,10 +26,21 @@
 }
 
 @media screen and (max-width: 576px) {
+    .flex-responsive{
+        flex-direction: column !important;
+    }
     .desktop-menu{
         display: none !important;
     }
     .mobile-menu {
         display: flex !important;
+    }
+    .filter-table {
+        margin-left: 0;
+        width: 100% !important;
+    }
+    .column-with-filter{
+        display: flex;
+        flex-direction: column;
     }
 }
