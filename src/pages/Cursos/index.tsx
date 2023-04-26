@@ -18,27 +18,25 @@ export default function Cursos() {
     },
     {
       component: (
-        <InputGroup>
-          <InputGroupText>Turno</InputGroupText>
-          <Input type="select">
-            <option>matutino</option>
-            <option>vespertino</option>
-            <option>noturno</option>
-            <option>integral</option>
-          </Input>
-        </InputGroup>
-      ),
-    },
-    {
-      component: (
-        <InputGroup>
-          <InputGroupText>Grupo</InputGroupText>
-          <Input type="select">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-          </Input>
-        </InputGroup>
+        <div className="d-flex gap-3">
+          <InputGroup className="w-50">
+            <InputGroupText>Turno</InputGroupText>
+            <Input type="select">
+              <option>matutino</option>
+              <option>vespertino</option>
+              <option>noturno</option>
+              <option>integral</option>
+            </Input>
+          </InputGroup>
+          <InputGroup className="w-50">
+            <InputGroupText>Grupo</InputGroupText>
+            <Input type="select">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </Input>
+          </InputGroup>
+        </div>
       ),
     },
   ];
