@@ -2,11 +2,46 @@ import TableWithSearch from "../../components/TableWithSearch/TableWithSearch";
 import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
 import { useState } from "react";
-import { Button } from "reactstrap";
+import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 
 export default function Cursos() {
   const [modal, setModal] = useState(false);
-  const Dados = ['Nome','Turno','Grupo'];
+
+  const dados = [
+    {
+      component: (
+        <InputGroup>
+          <InputGroupText>nome</InputGroupText>
+          <Input type="text" />
+        </InputGroup>
+      ),
+    },
+    {
+      component: (
+        <InputGroup>
+          <InputGroupText>Turno</InputGroupText>
+          <Input type="select">
+            <option>matutino</option>
+            <option>vespertino</option>
+            <option>noturno</option>
+            <option>integral</option>
+          </Input>
+        </InputGroup>
+      ),
+    },
+    {
+      component: (
+        <InputGroup>
+          <InputGroupText>Grupo</InputGroupText>
+          <Input type="select">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+          </Input>
+        </InputGroup>
+      ),
+    },
+  ];
 
   const data = [
     {
@@ -56,10 +91,22 @@ export default function Cursos() {
 
   return (
     <div className="p-4 d-flex gap-3 flex-column">
-      <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar curso</Button>
+      <Button
+        onClick={() => setModal(true)}
+        color="primary"
+        outline
+        style={{ maxWidth: "20%" }}
+      >
+        Adicionar curso
+      </Button>
       <TableWithSearch data={data} columns={columns} />
 
-      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Curso'} dados={Dados}/>
+      <InsertModal
+        open={modal}
+        close={() => setModal(!modal)}
+        name={"Curso"}
+        dados={dados}
+      />
     </div>
   );
 }
