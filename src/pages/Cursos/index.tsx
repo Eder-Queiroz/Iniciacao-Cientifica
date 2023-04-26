@@ -1,7 +1,13 @@
 import TableWithSearch from "../../components/TableWithSearch/TableWithSearch";
 import { textFilter } from "react-bootstrap-table2-filter";
+import InsertModal from "../../components/InsertModal";
+import { useState } from "react";
+import { Button } from "reactstrap";
 
 export default function Cursos() {
+  const [modal, setModal] = useState(false);
+  const Dados = ['Nome','Turno','Grupo'];
+
   const data = [
     {
       id: 1,
@@ -49,8 +55,11 @@ export default function Cursos() {
   ];
 
   return (
-    <div>
+    <div className="p-4 d-flex gap-3 flex-column">
+      <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar curso</Button>
       <TableWithSearch data={data} columns={columns} />
+
+      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Curso'} dados={Dados}/>
     </div>
   );
 }

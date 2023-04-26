@@ -29,7 +29,7 @@ export default function TableWithSearch(info) {
   };
 
   return (
-    <div className="p-4">
+    <div>
       <BootstrapTable
         keyField="id"
         data={info.data}

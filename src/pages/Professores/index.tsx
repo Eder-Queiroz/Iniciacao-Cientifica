@@ -1,7 +1,13 @@
 import TableWithSearch from "../../components/TableWithSearch/TableWithSearch";
 import { textFilter } from "react-bootstrap-table2-filter";
+import InsertModal from "../../components/InsertModal";
+import { useState } from "react";
+import { Button } from "reactstrap";
 
 function Professores() {
+  const [modal, setModal] = useState(false);
+  const Dados = ['nome','email'];
+  
   const data = [
     {
       id: 1,
@@ -69,8 +75,11 @@ function Professores() {
   ];
 
   return (
-    <div>
+    <div className="p-4 d-flex gap-3 flex-column">
+      <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar professor</Button>
       <TableWithSearch data={data} columns={columns} />
+
+      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Professor'} dados={Dados}/>
     </div>
   );
 }

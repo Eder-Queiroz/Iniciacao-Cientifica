@@ -1,19 +1,25 @@
 import TableWithSearch from "../../components/TableWithSearch/TableWithSearch";
 import { textFilter } from "react-bootstrap-table2-filter";
+import InsertModal from "../../components/InsertModal";
+import { useState } from "react";
+import { Button } from "reactstrap";
 
 function Restrições() {
+  const [modal, setModal] = useState(false);
+  const Dados = ['Professor','Dia','Horário'];
+
   const data = [
     {
       id: 1,
       teacher: "Daniela",
       day: "segunda",
-      period: "3º",
+      time: "tarde",
     },
     {
       id: 2,
       teacher: "Leandro",
       day: "Quinta",
-      period: "3º",
+      time: "tarde",
     },
   ];
 
@@ -39,8 +45,8 @@ function Restrições() {
       },
     },
     {
-      dataField: "period",
-      text: "Período",
+      dataField: "time",
+      text: "Horário",
       sort: true,
       style: {
         width: "20%",
@@ -49,8 +55,11 @@ function Restrições() {
   ];
 
   return (
-    <div>
+    <div className="p-4 d-flex gap-3 flex-column">
+      <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar restrição</Button>
       <TableWithSearch data={data} columns={columns} />
+
+      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Restrição'} dados={Dados}/>
     </div>
   );
 }
