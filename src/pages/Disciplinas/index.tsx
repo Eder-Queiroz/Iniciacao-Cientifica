@@ -2,11 +2,76 @@ import TableWithSearch from "../../components/TableWithSearch/TableWithSearch";
 import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
 import { useState } from "react";
-import { Button } from "reactstrap";
+import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 
 function Disciplinas() {
   const [modal, setModal] = useState(false);
-  const Dados = ['Disciplina','Curso','Período','Qtd. Aulas', 'Professor'];
+  const dados =[
+    {
+      component: (
+        <InputGroup>
+          <InputGroupText>Disciplina</InputGroupText>
+          <Input type="text" />
+        </InputGroup>
+      ),
+    },
+    {
+      component: (
+        <InputGroup>
+          <InputGroupText>Professor</InputGroupText>
+          <Input type="text" />
+        </InputGroup>
+      ),
+    },
+    {
+      component: (
+        <InputGroup>
+          <InputGroupText>Curso</InputGroupText>
+          <Input type="select"> 
+            <option>Engenharia de Computação</option>            
+            <option>Análise e Desenvolvimento de Sistemas</option>
+          </Input>
+        </InputGroup>
+      )
+    },
+    {
+      component: (
+        <div className="d-flex gap-3">
+          <InputGroup className="w-50">
+            <InputGroupText>Período</InputGroupText>
+            <Input type="select"> 
+              <option>1°</option>            
+              <option>2°</option>
+              <option>3°</option>
+              <option>4°</option>
+              <option>5°</option>
+              <option>6°</option>
+              <option>7°</option>
+              <option>8°</option>
+              <option>9°</option>
+              <option>10°</option>
+            </Input>
+        </InputGroup>
+        <InputGroup className="w-50">
+          <InputGroupText>Qtd.Aulas</InputGroupText>
+            <Input type="select"> 
+              <option>1</option>            
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+            </Input>
+        </InputGroup>
+        </div>
+      )
+    },
+    
+  ];
 
   const data = [
     {
@@ -82,7 +147,7 @@ function Disciplinas() {
       <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar disciplina</Button>
       <TableWithSearch data={data} columns={columns} />
 
-      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Disciplina'} dados={Dados}/>
+      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Disciplina'} dados={dados}/>
     </div>
   );
 }

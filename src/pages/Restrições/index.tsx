@@ -2,11 +2,45 @@ import TableWithSearch from "../../components/TableWithSearch/TableWithSearch";
 import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
 import { useState } from "react";
-import { Button } from "reactstrap";
+import { Button,Input,InputGroup,InputGroupText } from "reactstrap";
 
 function Restrições() {
   const [modal, setModal] = useState(false);
-  const Dados = ['Professor','Dia','Horário'];
+  const dados =[
+    {
+      component: (
+        <InputGroup>
+          <InputGroupText>Professor</InputGroupText>
+          <Input type="text" />
+        </InputGroup>
+      ),
+    },
+    {
+      component: (
+        <div className="d-flex gap-3">
+            <InputGroup className="w-50">
+              <InputGroupText>Dia</InputGroupText>
+              <Input type="select"> 
+                <option>Segunda-Feira</option>            
+                <option>Terça-Feira</option>
+                <option>Quarta-Feira</option>
+                <option>Quinta-Feira</option>
+                <option>Sexta-Feira</option>
+              </Input>
+          </InputGroup>
+          <InputGroup className="w-50">
+            <InputGroupText>Horário</InputGroupText>
+            <Input type="select"> 
+              <option>Manhã</option>            
+              <option>Tarde</option>
+              <option>Noite</option>
+            </Input>
+          </InputGroup>
+        </div>
+        
+      )
+    },
+  ];
 
   const data = [
     {
@@ -59,7 +93,7 @@ function Restrições() {
       <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar restrição</Button>
       <TableWithSearch data={data} columns={columns} />
 
-      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Restrição'} dados={Dados}/>
+      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Restrição'} dados={dados}/>
     </div>
   );
 }

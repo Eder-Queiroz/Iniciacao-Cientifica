@@ -11,7 +11,7 @@ export default function Cursos() {
     {
       component: (
         <InputGroup>
-          <InputGroupText>nome</InputGroupText>
+          <InputGroupText>Nome</InputGroupText>
           <Input type="text" />
         </InputGroup>
       ),
@@ -22,10 +22,10 @@ export default function Cursos() {
           <InputGroup className="w-50">
             <InputGroupText>Turno</InputGroupText>
             <Input type="select">
-              <option>matutino</option>
-              <option>vespertino</option>
-              <option>noturno</option>
-              <option>integral</option>
+              <option>Matutino</option>
+              <option>Vespertino</option>
+              <option>Noturno</option>
+              <option>Integral</option>
             </Input>
           </InputGroup>
           <InputGroup className="w-50">
