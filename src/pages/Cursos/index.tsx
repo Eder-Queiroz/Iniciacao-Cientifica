@@ -6,13 +6,18 @@ import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 
 export default function Cursos() {
   const [modal, setModal] = useState(false);
+  const [info, setInfo] = useState({
+    name: '', 
+    shift: '',
+    grouping: '', 
+  });
 
   const dados = [
     {
       component: (
         <InputGroup>
           <InputGroupText>Nome</InputGroupText>
-          <Input type="text" />
+          <Input type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,name: e.target.value}))} />
         </InputGroup>
       ),
     },
@@ -21,35 +26,35 @@ export default function Cursos() {
         <div className="d-flex gap-3">
           <InputGroup className="w-50">
             <InputGroupText>Turno</InputGroupText>
-            <Input type="select">
-              <option>Matutino</option>
-              <option>Vespertino</option>
-              <option>Noturno</option>
-              <option>Integral</option>
+            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,shift: e.target.value}))} >
+              <option value='matutino'>Matutino</option>
+              <option value='vespertino'>Vespertino</option>
+              <option value='noturno'>Noturno</option>
+              <option value='integral'>Integral</option>
             </Input>
           </InputGroup>
           <InputGroup className="w-50">
             <InputGroupText>Grupo</InputGroupText>
-            <Input type="select">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
+            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,grouping: e.target.value}))} >
+              <option value='1'>1</option>
+              <option value='2'>2</option>
+              <option value='3'>3</option>
             </Input>
           </InputGroup>
         </div>
       ),
     },
   ];
-
+  
   const data = [
     {
-      id: 1,
+      id:1,
       name: "Engenharia dos computers",
       shift: "matutino",
       grouping: "Não sei para que serve",
     },
     {
-      id: 2,
+      id:2,
       name: "ADS",
       shift: "noturno",
       grouping: "Não sei para que serve",
@@ -86,6 +91,8 @@ export default function Cursos() {
       },
     },
   ];
+
+  //data.push(info);
 
   return (
     <div className="p-4 d-flex gap-3 flex-column">

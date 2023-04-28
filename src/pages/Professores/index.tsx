@@ -6,13 +6,17 @@ import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 
 function Professores() {
   const [modal, setModal] = useState(false);
+  const [info, setInfo] = useState({
+    name: '', 
+    email: '',
+  });
   
   const dados = [
     {
       component: (
         <InputGroup>
           <InputGroupText>Nome</InputGroupText>
-          <Input type="text" />
+          <Input type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,name: e.target.value}))} />
         </InputGroup>
       ),
     },
@@ -20,7 +24,7 @@ function Professores() {
       component: (
         <InputGroup>
           <InputGroupText>Email</InputGroupText>
-          <Input type="text" />
+          <Input type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,email: e.target.value}))} />
         </InputGroup>
       ),
     },

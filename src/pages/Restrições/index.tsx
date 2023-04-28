@@ -6,12 +6,17 @@ import { Button,Input,InputGroup,InputGroupText } from "reactstrap";
 
 function Restrições() {
   const [modal, setModal] = useState(false);
+  const [info, setInfo] = useState({
+    teacher: '', 
+    day: '',
+    time: '', 
+  });
   const dados =[
     {
       component: (
         <InputGroup>
           <InputGroupText>Professor</InputGroupText>
-          <Input type="text" />
+          <Input type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,teacher: e.target.value}))} />
         </InputGroup>
       ),
     },
@@ -20,20 +25,20 @@ function Restrições() {
         <div className="d-flex gap-3">
             <InputGroup className="w-50">
               <InputGroupText>Dia</InputGroupText>
-              <Input type="select"> 
-                <option>Segunda-Feira</option>            
-                <option>Terça-Feira</option>
-                <option>Quarta-Feira</option>
-                <option>Quinta-Feira</option>
-                <option>Sexta-Feira</option>
+              <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,day: e.target.value}))} > 
+                <option value='segunda-feira'>Segunda-Feira</option>            
+                <option value='terça-feira'>Terça-Feira</option>
+                <option value='quarta-feira'>Quarta-Feira</option>
+                <option value='quinta-feira'>Quinta-Feira</option>
+                <option value='sexta-feira'>Sexta-Feira</option>
               </Input>
           </InputGroup>
           <InputGroup className="w-50">
             <InputGroupText>Horário</InputGroupText>
-            <Input type="select"> 
-              <option>Manhã</option>            
-              <option>Tarde</option>
-              <option>Noite</option>
+            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,time: e.target.value}))} > 
+              <option value='manhã'>Manhã</option>            
+              <option value='tarde'>Tarde</option>
+              <option value='noite'>Noite</option>
             </Input>
           </InputGroup>
         </div>

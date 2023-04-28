@@ -6,12 +6,19 @@ import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 
 function Disciplinas() {
   const [modal, setModal] = useState(false);
+  const [info, setInfo] = useState({
+    name: '', 
+    course: '',
+    period: '', 
+    numberClasses: '',
+    teacher: '',
+  });
   const dados =[
     {
       component: (
         <InputGroup>
           <InputGroupText>Disciplina</InputGroupText>
-          <Input type="text" />
+          <Input type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,name: e.target.value}))} />
         </InputGroup>
       ),
     },
@@ -19,7 +26,7 @@ function Disciplinas() {
       component: (
         <InputGroup>
           <InputGroupText>Professor</InputGroupText>
-          <Input type="text" />
+          <Input type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,teacher: e.target.value}))} />
         </InputGroup>
       ),
     },
@@ -27,9 +34,9 @@ function Disciplinas() {
       component: (
         <InputGroup>
           <InputGroupText>Curso</InputGroupText>
-          <Input type="select"> 
-            <option>Engenharia de Computação</option>            
-            <option>Análise e Desenvolvimento de Sistemas</option>
+          <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,course: e.target.value}))}> 
+            <option value='EC'>Engenharia de Computação</option>            
+            <option value='ADS'>Análise e Desenvolvimento de Sistemas</option>
           </Input>
         </InputGroup>
       )
@@ -39,32 +46,32 @@ function Disciplinas() {
         <div className="d-flex gap-3">
           <InputGroup className="w-50">
             <InputGroupText>Período</InputGroupText>
-            <Input type="select"> 
-              <option>1°</option>            
-              <option>2°</option>
-              <option>3°</option>
-              <option>4°</option>
-              <option>5°</option>
-              <option>6°</option>
-              <option>7°</option>
-              <option>8°</option>
-              <option>9°</option>
-              <option>10°</option>
+            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,period: e.target.value}))}> 
+              <option value='1'>1°</option>            
+              <option value='2'>2°</option>
+              <option value='3'>3°</option>
+              <option value='4'>4°</option>
+              <option value='5'>5°</option>
+              <option value='6'>6°</option>
+              <option value='7'>7°</option>
+              <option value='8'>8°</option>
+              <option value='9'>9°</option>
+              <option value='10'>10°</option>
             </Input>
         </InputGroup>
         <InputGroup className="w-50">
           <InputGroupText>Qtd.Aulas</InputGroupText>
-            <Input type="select"> 
-              <option>1</option>            
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>10</option>
+            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,numberClasses: e.target.value}))}> 
+              <option value='1'>1</option>            
+              <option value='2'>2</option>
+              <option value='3'>3</option>
+              <option value='4'>4</option>
+              <option value='5'>5</option>
+              <option value='6'>6</option>
+              <option value='7'>7</option>
+              <option value='8'>8</option>
+              <option value='9'>9</option>
+              <option value='10'>10</option>
             </Input>
         </InputGroup>
         </div>
