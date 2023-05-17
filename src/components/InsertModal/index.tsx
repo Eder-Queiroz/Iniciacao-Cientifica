@@ -21,13 +21,12 @@ function InsertModal(props: any) {
         <ModalBody>
           <form id="form" className="d-flex flex-column gap-2" onSubmit={() => props.submit()}>
             {props.dados.map((value: any) => value.component)}
-            <Button color="primary">Cadastrar</Button>
+            <div className="d-flex flex-row justify-content-end gap-1">
+              <Button color="primary">Cadastrar</Button>
+              <Button color="secondary" onClick={props.close}>Cancelar</Button>
+            </div>
           </form>
         </ModalBody>
-        <ModalFooter>
-          <Button color="primary">Cadastrar</Button>{" "}
-          <Button color="secondary" onClick={props.close}>Cancelar</Button>
-        </ModalFooter>
       </Modal>
     </div>
   );
