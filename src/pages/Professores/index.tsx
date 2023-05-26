@@ -3,16 +3,9 @@ import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
 import { useState } from "react";
 import { Button, InputGroup, InputGroupText } from "reactstrap";
-import { useForm } from "react-hook-form";
-import {z} from "zod";
-import {zodResolver} from "@hookform/resolvers/zod";
 
-const createTeacherFormSchema = z.object({
-  name: z.string(),
-  email: z.string(),
-})
 
-type createTeacherFormData = z.infer<typeof createTeacherFormSchema>
+
 
 function Professores() {
   const [modal, setModal] = useState(false);
@@ -21,20 +14,13 @@ function Professores() {
     email: '',
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: {errors},
-  } = useForm <createTeacherFormData> ({
-    resolver: zodResolver(createTeacherFormSchema),
-  });
   
   const dados = [
     {
       component: (
         <InputGroup>
           <InputGroupText>Nome</InputGroupText>
-          <input {...register("name")} type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,name: e.target.value}))} className="form-control" />
+          <input  type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,name: e.target.value}))} className="form-control" />
         </InputGroup>
       ),
     },
@@ -42,15 +28,14 @@ function Professores() {
       component: (
         <InputGroup>
           <InputGroupText>Email</InputGroupText>
-          <input {...register("email")} type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,email: e.target.value}))} className="form-control" />
+          <input type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,email: e.target.value}))} className="form-control" />
         </InputGroup>
       ),
     },
   ];
 
-  const createTeacher = (data:any) =>{
-    data.preventDefault();
-    console.log(data);
+  const handleSubmit = () => {
+    setModal(!modal);
   }
   
   const data = [
@@ -124,7 +109,7 @@ function Professores() {
       <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar professor</Button>
       <TableWithSearch data={data} columns={columns} />
 
-      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Professor'} dados={dados} submit={() => handleSubmit(createTeacher)}/>
+      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Professor'} dados={dados} submit={() => handleSubmit()}/>
     </div>
   );
 }

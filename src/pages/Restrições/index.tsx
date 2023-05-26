@@ -11,6 +11,11 @@ function Restrições() {
     day: '',
     time: '', 
   });
+
+  const handleSubmit = () => {
+    setModal(!modal);
+  }
+
   const dados =[
     {
       component: (
@@ -98,7 +103,7 @@ function Restrições() {
       <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar restrição</Button>
       <TableWithSearch data={data} columns={columns} />
 
-      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Restrição'} dados={dados}/>
+      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Restrição'} dados={dados} submit={() => handleSubmit()}/>
     </div>
   );
 }

@@ -12,6 +12,10 @@ export default function Cursos() {
     grouping: '', 
   });
 
+  const handleSubmit = () => {
+    setModal(!modal);
+  }
+
   const dados = [
     {
       component: (
@@ -111,6 +115,7 @@ export default function Cursos() {
         close={() => setModal(!modal)}
         name={"Curso"}
         dados={dados}
+        submit={() => handleSubmit()}
       />
     </div>
   );

@@ -11,6 +11,11 @@ function Turmas() {
     period: '',
     numberStudents: '', 
   });
+
+  const handleSubmit = () => {
+    setModal(!modal);
+  }
+
   const dados =[
 
     {
@@ -110,7 +115,7 @@ function Turmas() {
       <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar turma</Button>
       <TableWithSearch data={data} columns={columns} />
 
-      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Turma'} dados={dados}/>
+      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Turma'} dados={dados} submit={() => handleSubmit()}/>
     </div>
   );
 }

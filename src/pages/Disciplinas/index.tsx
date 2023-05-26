@@ -13,6 +13,11 @@ function Disciplinas() {
     numberClasses: '',
     teacher: '',
   });
+
+  const handleSubmit = () => {
+    setModal(!modal);
+  }
+
   const dados =[
     {
       component: (
@@ -154,7 +159,7 @@ function Disciplinas() {
       <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar disciplina</Button>
       <TableWithSearch data={data} columns={columns} />
 
-      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Disciplina'} dados={dados}/>
+      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Disciplina'} dados={dados} submit={() => handleSubmit()}/>
     </div>
   );
 }
