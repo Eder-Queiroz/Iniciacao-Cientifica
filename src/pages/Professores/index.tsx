@@ -4,7 +4,6 @@ import InsertModal from "../../components/InsertModal";
 import { useState, useEffect } from "react";
 import { Button, InputGroup, InputGroupText } from "reactstrap";
 import { getProfessor, insertProfessor } from "../../api/api";
-import { stat } from "fs";
 
 function Professores() {
   const [modal, setModal] = useState(false);
@@ -65,8 +64,6 @@ function Professores() {
     insertNewProfessor(info);
     window.location.reload();
   };
-
-  console.log(status);
 
   const columns = [
     {
