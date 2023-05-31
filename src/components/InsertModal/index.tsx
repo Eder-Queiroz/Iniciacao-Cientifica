@@ -1,13 +1,6 @@
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from "reactstrap";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 function InsertModal(props: any) {
-
   return (
     <div>
       <Modal
@@ -19,11 +12,19 @@ function InsertModal(props: any) {
           toggle={props.close}
         >{`Adicionar ${props.name}`}</ModalHeader>
         <ModalBody>
-          <form id="form" className="d-flex flex-column gap-2" onSubmit={() => props.submit()}>
+          <form
+            id="form"
+            className="d-flex flex-column gap-2"
+            onSubmit={(e) => props.submit(e)}
+          >
             {props.dados.map((value: any) => value.component)}
             <div className="d-flex flex-row justify-content-end gap-1">
-              <Button color="primary">Cadastrar</Button>
-              <Button color="secondary" onClick={props.close}>Cancelar</Button>
+              <Button color="primary" sub>
+                Cadastrar
+              </Button>
+              <Button color="secondary" onClick={props.close}>
+                Cancelar
+              </Button>
             </div>
           </form>
         </ModalBody>

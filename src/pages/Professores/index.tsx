@@ -1,26 +1,46 @@
 import TableWithSearch from "../../components/TableWithSearch/TableWithSearch";
 import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, InputGroup, InputGroupText } from "reactstrap";
-
-
-
+import { getProfessor, insertProfessor } from "../../api/api";
+import { stat } from "fs";
 
 function Professores() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState({
-    name: '', 
-    email: '',
+    name: "",
+    email: "",
   });
+  const [professor, setProfessor] = useState([]);
+  const [status, setStatus] = useState({});
 
-  
+  const insertNewProfessor = async (data: object) => {
+    const status = await insertProfessor(data);
+    setStatus({ status: status });
+  };
+
+  useEffect(() => {
+    const loadProfessor = async () => {
+      const response = await getProfessor();
+      setProfessor(response);
+    };
+
+    loadProfessor();
+  }, []);
+
   const dados = [
     {
       component: (
         <InputGroup>
           <InputGroupText>Nome</InputGroupText>
-          <input  type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,name: e.target.value}))} className="form-control" />
+          <input
+            type="text"
+            onChange={(e) =>
+              setInfo((prevState) => ({ ...prevState, name: e.target.value }))
+            }
+            className="form-control"
+          />
         </InputGroup>
       ),
     },
@@ -28,58 +48,25 @@ function Professores() {
       component: (
         <InputGroup>
           <InputGroupText>Email</InputGroupText>
-          <input type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,email: e.target.value}))} className="form-control" />
+          <input
+            type="text"
+            onChange={(e) =>
+              setInfo((prevState) => ({ ...prevState, email: e.target.value }))
+            }
+            className="form-control"
+          />
         </InputGroup>
       ),
     },
   ];
 
-  const handleSubmit = () => {
-    setModal(!modal);
-  }
-  
-  const data = [
-    {
-      id: 1,
-      name: "Eder Queiroz",
-      email: "eder@queiroz.com",
-    },
-    {
-      id: 2,
-      name: "Luiz Folador",
-      email: "luiz@folador.com",
-    },
-    {
-      id: 3,
-      name: "Eder Queiroz",
-      email: "eder@queiroz.com",
-    },
-    {
-      id: 4,
-      name: "Luiz Folador",
-      email: "luiz@folador.com",
-    },
-    {
-      id: 5,
-      name: "Eder Queiroz",
-      email: "eder@queiroz.com",
-    },
-    {
-      id: 6,
-      name: "Luiz Folador",
-      email: "luiz@folador.com",
-    },
-    {
-      id: 7,
-      name: "Eder Queiroz",
-      email: "eder@queiroz.com",
-    },
-    {
-      id: 8,
-      name: "Luiz Folador",
-      email: "luiz@folador.com",
-    },
-  ];
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    insertNewProfessor(info);
+    window.location.reload();
+  };
+
+  console.log(status);
 
   const columns = [
     {
@@ -106,10 +93,23 @@ function Professores() {
 
   return (
     <div className="p-4 d-flex gap-3 flex-column">
-      <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar professor</Button>
-      <TableWithSearch data={data} columns={columns} />
+      <Button
+        onClick={() => setModal(true)}
+        color="primary"
+        outline
+        style={{ maxWidth: "20%" }}
+      >
+        Adicionar professor
+      </Button>
+      <TableWithSearch data={professor} columns={columns} />
 
-      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Professor'} dados={dados} submit={() => handleSubmit()}/>
+      <InsertModal
+        open={modal}
+        close={() => setModal(!modal)}
+        name={"Professor"}
+        dados={dados}
+        submit={handleSubmit}
+      />
     </div>
   );
 }
