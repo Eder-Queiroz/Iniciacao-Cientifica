@@ -1,8 +1,9 @@
 import TableWithSearch from "../../components/TableWithSearch/TableWithSearch";
 import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
+import {insertTurma,getTurma} from '../../api/api'
 
 function Turmas() {
   const [modal, setModal] = useState(false);
@@ -12,9 +13,22 @@ function Turmas() {
     numberStudents: '', 
   });
 
-  const handleSubmit = () => {
-    setModal(!modal);
-  }
+  const [turma, setTurma] = useState([]);
+  const [status, setStatus] = useState({});
+
+  const insertNewTurma = async (data: object) => {
+    const status = await insertTurma(data);
+    setStatus({ status: status });
+  };
+
+  useEffect(() => {
+    const loadTurma = async () => {
+      const response = await getTurma();
+      setTurma(response);
+    };
+
+    loadTurma();
+  }, []);
 
   const dados =[
 
@@ -22,7 +36,7 @@ function Turmas() {
       component: (
         <InputGroup>
           <InputGroupText>Curso</InputGroupText>
-          <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,course: e.target.value}))}> 
+          <Input type="select" defaultValue="EC" onChange={(e) => setInfo((prevState) => ({...prevState ,course: e.target.value}))}> 
             <option value='EC'>Engenharia de Computação</option>            
             <option value='ADS'>Análise e Desenvolvimento de Sistemas</option>
           </Input>
@@ -34,7 +48,7 @@ function Turmas() {
         <div className="d-flex gap-3">
              <InputGroup className="w-50">
             <InputGroupText>Período</InputGroupText>
-            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,period: e.target.value}))}> 
+            <Input type="select" defaultValue="1" onChange={(e) => setInfo((prevState) => ({...prevState ,period: e.target.value}))}> 
               <option value='1'>1°</option>            
               <option value='2'>2°</option>
               <option value='3'>3°</option>
@@ -58,26 +72,11 @@ function Turmas() {
     
   ];
   
-  const data = [
-    {
-      id: 1,
-      course: "Engenharia dos computers",
-      period: "1º",
-      numberStudents: "35",
-    },
-    {
-      id: 2,
-      course: "Engenharia dos computers",
-      period: "2º",
-      numberStudents: "20",
-    },
-    {
-      id: 3,
-      course: "Engenharia dos computers",
-      period: "3º",
-      numberStudents: "10",
-    },
-  ];
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    insertNewTurma(info);
+    window.location.reload();
+  };
 
   const columns = [
     {
@@ -113,9 +112,9 @@ function Turmas() {
   return (
     <div className="p-4 d-flex gap-3 flex-column">
       <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar turma</Button>
-      <TableWithSearch data={data} columns={columns} />
+      <TableWithSearch data={turma} columns={columns} />
 
-      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Turma'} dados={dados} submit={() => handleSubmit()}/>
+      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Turma'} dados={dados} submit={handleSubmit}/>
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import TableWithSearch from "../../components/TableWithSearch/TableWithSearch";
 import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
+import {insertCurso,getCurso} from '../../api/api'
 
 export default function Cursos() {
   const [modal, setModal] = useState(false);
@@ -12,9 +13,22 @@ export default function Cursos() {
     grouping: '', 
   });
 
-  const handleSubmit = () => {
-    setModal(!modal);
-  }
+  const [curso, setCurso] = useState([]);
+  const [status, setStatus] = useState({});
+
+  const insertNewCurso = async (data: object) => {
+    const status = await insertCurso(data);
+    setStatus({ status: status });
+  };
+
+  useEffect(() => {
+    const loadCurso = async () => {
+      const response = await getCurso();
+      setCurso(response);
+    };
+
+    loadCurso();
+  }, []);
 
   const dados = [
     {
@@ -30,7 +44,7 @@ export default function Cursos() {
         <div className="d-flex gap-3">
           <InputGroup className="w-50">
             <InputGroupText>Turno</InputGroupText>
-            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,shift: e.target.value}))} >
+            <Input type="select" defaultValue="matutino" onChange={(e) => setInfo((prevState) => ({...prevState ,shift: e.target.value}))} >
               <option value='matutino'>Matutino</option>
               <option value='vespertino'>Vespertino</option>
               <option value='noturno'>Noturno</option>
@@ -39,7 +53,7 @@ export default function Cursos() {
           </InputGroup>
           <InputGroup className="w-50">
             <InputGroupText>Grupo</InputGroupText>
-            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,grouping: e.target.value}))} >
+            <Input type="select" defaultValue="1" onChange={(e) => setInfo((prevState) => ({...prevState ,grouping: e.target.value}))} >
               <option value='1'>1</option>
               <option value='2'>2</option>
               <option value='3'>3</option>
@@ -49,21 +63,12 @@ export default function Cursos() {
       ),
     },
   ];
-  
-  const data = [
-    {
-      id:1,
-      name: "Engenharia dos computers",
-      shift: "matutino",
-      grouping: "Não sei para que serve",
-    },
-    {
-      id:2,
-      name: "ADS",
-      shift: "noturno",
-      grouping: "Não sei para que serve",
-    },
-  ];
+
+  const handleSubmit = (e:any) => {
+    e.preventDefault();
+    insertNewCurso(info);
+    window.location.reload();
+  };
 
   const columns = [
     {
@@ -96,8 +101,6 @@ export default function Cursos() {
     },
   ];
 
-  //data.push(info);
-
   return (
     <div className="p-4 d-flex gap-3 flex-column">
       <Button
@@ -108,14 +111,14 @@ export default function Cursos() {
       >
         Adicionar curso
       </Button>
-      <TableWithSearch data={data} columns={columns} />
+      <TableWithSearch data={curso} columns={columns} />
 
       <InsertModal
         open={modal}
         close={() => setModal(!modal)}
         name={"Curso"}
         dados={dados}
-        submit={() => handleSubmit()}
+        submit={handleSubmit}
       />
     </div>
   );

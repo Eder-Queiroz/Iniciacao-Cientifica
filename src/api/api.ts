@@ -30,3 +30,83 @@ export const insertProfessor = async (data:object) => {
     }
 
 }
+
+export const getCurso = async () => {
+    
+    try{
+        const {data} = await api.get('/courses');
+        return data;
+    }catch(error){
+        console.error("Error while getting curso: ", error);
+    }
+}
+
+export const insertCurso = async (data:object) => {
+    
+    try{
+        const {status} = await api.post('/courses', data);
+        return status;
+    }catch(error){
+        console.error("Error while insertinng curso: ", error);
+    }
+}
+
+export const getDisciplina = async () => {
+    
+    try{
+        const {data} = await api.get('/subjects');
+        return data;
+    }catch(error){
+        console.error("Error while getting Disciplina: ", error);
+    }
+}
+
+export const insertDisciplina = async (data:object) => {
+    
+    try{
+        const {status} = await api.post('/subjects', data);
+        return status;
+    }catch(error){
+        console.error("Error while insertinng Disciplina: ", error);
+    }
+}
+
+export const getTurma = async () => {
+    
+    try{
+        const {data} = await api.get('/classes');
+        return data;
+    }catch(error){
+        console.error("Error while getting Turma: ", error);
+    }
+}
+
+export const insertTurma = async (data:object) => {
+    
+    try{
+        const {status} = await api.post('/classes', data);
+        return status;
+    }catch(error){
+        console.error("Error while insertinng Turma: ", error);
+    }
+}
+
+export const getRestricao = async () => {
+    
+    try{
+        const {data} = await api.get('/restrictions');
+        return data;
+    }catch(error){
+        console.error("Error while getting Restrição: ", error);
+    }
+}
+
+export const insertRestricao = async (data:object) => {
+    
+    try{
+        const {status} = await api.post('/restrictions', data);
+        return status;
+    }catch(error){
+        console.error("Error while insertinng Restrição: ", error);
+    }
+}

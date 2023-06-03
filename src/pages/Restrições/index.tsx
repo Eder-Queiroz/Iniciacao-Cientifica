@@ -1,8 +1,9 @@
 import TableWithSearch from "../../components/TableWithSearch/TableWithSearch";
 import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button,Input,InputGroup,InputGroupText } from "reactstrap";
+import {insertRestricao,getRestricao} from '../../api/api'
 
 function Restrições() {
   const [modal, setModal] = useState(false);
@@ -12,10 +13,23 @@ function Restrições() {
     time: '', 
   });
 
-  const handleSubmit = () => {
-    setModal(!modal);
-  }
+  const [restriçao, setRestricao] = useState([]);
+  const [status, setStatus] = useState({});
 
+  const insertNewRestricao = async (data: object) => {
+    const status = await insertRestricao(data);
+    setStatus({ status: status });
+  };
+
+  useEffect(() => {
+    const loadRestricao = async () => {
+      const response = await getRestricao();
+      setRestricao(response);
+    };
+
+    loadRestricao();
+  }, []);
+  
   const dados =[
     {
       component: (
@@ -30,7 +44,7 @@ function Restrições() {
         <div className="d-flex gap-3">
             <InputGroup className="w-50">
               <InputGroupText>Dia</InputGroupText>
-              <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,day: e.target.value}))} > 
+              <Input type="select" defaultValue="segunda-feira" onChange={(e) => setInfo((prevState) => ({...prevState ,day: e.target.value}))} > 
                 <option value='segunda-feira'>Segunda-Feira</option>            
                 <option value='terça-feira'>Terça-Feira</option>
                 <option value='quarta-feira'>Quarta-Feira</option>
@@ -40,7 +54,7 @@ function Restrições() {
           </InputGroup>
           <InputGroup className="w-50">
             <InputGroupText>Horário</InputGroupText>
-            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,time: e.target.value}))} > 
+            <Input type="select" defaultValue="manhã" onChange={(e) => setInfo((prevState) => ({...prevState ,time: e.target.value}))} > 
               <option value='manhã'>Manhã</option>            
               <option value='tarde'>Tarde</option>
               <option value='noite'>Noite</option>
@@ -52,20 +66,11 @@ function Restrições() {
     },
   ];
 
-  const data = [
-    {
-      id: 1,
-      teacher: "Daniela",
-      day: "segunda",
-      time: "tarde",
-    },
-    {
-      id: 2,
-      teacher: "Leandro",
-      day: "Quinta",
-      time: "tarde",
-    },
-  ];
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    insertNewRestricao(info);
+    window.location.reload();
+  };
 
   const columns = [
     {
@@ -101,9 +106,9 @@ function Restrições() {
   return (
     <div className="p-4 d-flex gap-3 flex-column">
       <Button onClick={() => setModal(true)} color="primary" outline style={{maxWidth: '20%'}}>Adicionar restrição</Button>
-      <TableWithSearch data={data} columns={columns} />
+      <TableWithSearch data={restriçao} columns={columns} />
 
-      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Restrição'} dados={dados} submit={() => handleSubmit()}/>
+      <InsertModal open = {modal} close={() => setModal(!modal)} name={'Restrição'} dados={dados} submit={handleSubmit}/>
     </div>
   );
 }
