@@ -9,9 +9,9 @@ function Disciplinas() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState({
     name: '', 
-    course: '',
-    period: '', 
-    numberClasses: '',
+    course: 'EC',
+    period: '1', 
+    numberClasses: '1',
     teacher: '',
   });
 

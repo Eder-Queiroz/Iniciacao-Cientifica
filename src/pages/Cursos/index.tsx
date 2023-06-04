@@ -9,8 +9,8 @@ export default function Cursos() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState({
     name: '', 
-    shift: '',
-    grouping: '', 
+    shift: 'matutino',
+    grouping: '1', 
   });
 
   const [curso, setCurso] = useState([]);
@@ -44,7 +44,7 @@ export default function Cursos() {
         <div className="d-flex gap-3">
           <InputGroup className="w-50">
             <InputGroupText>Turno</InputGroupText>
-            <Input type="select" defaultValue="matutino" onChange={(e) => setInfo((prevState) => ({...prevState ,shift: e.target.value}))} >
+            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,shift: e.target.value}))} >
               <option value='matutino'>Matutino</option>
               <option value='vespertino'>Vespertino</option>
               <option value='noturno'>Noturno</option>
@@ -53,7 +53,7 @@ export default function Cursos() {
           </InputGroup>
           <InputGroup className="w-50">
             <InputGroupText>Grupo</InputGroupText>
-            <Input type="select" defaultValue="1" onChange={(e) => setInfo((prevState) => ({...prevState ,grouping: e.target.value}))} >
+            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,grouping: e.target.value}))} >
               <option value='1'>1</option>
               <option value='2'>2</option>
               <option value='3'>3</option>

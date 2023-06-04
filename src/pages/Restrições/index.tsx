@@ -9,8 +9,8 @@ function Restrições() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState({
     teacher: '', 
-    day: '',
-    time: '', 
+    day: 'segunda-feira',
+    time: 'manhã', 
   });
 
   const [restriçao, setRestricao] = useState([]);

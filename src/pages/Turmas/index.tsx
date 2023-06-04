@@ -8,8 +8,8 @@ import {insertTurma,getTurma} from '../../api/api'
 function Turmas() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState({
-    course: '', 
-    period: '',
+    course: 'EC', 
+    period: '1',
     numberStudents: '', 
   });
 
