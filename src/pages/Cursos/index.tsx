@@ -4,10 +4,11 @@ import InsertModal from "../../components/InsertModal";
 import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertCurso, getCurso } from "../../api/api";
+import { Course } from "../../types/types";
 
 export default function Cursos() {
   const [modal, setModal] = useState(false);
-  const [info, setInfo] = useState({
+  const [info, setInfo] = useState<Course>({
     name: "",
     shift: "matutino",
     group: "1",
@@ -16,7 +17,17 @@ export default function Cursos() {
   const [curso, setCurso] = useState([]);
   const [status, setStatus] = useState({});
 
-  const insertNewCurso = async (data: object) => {
+  const validationCourse = (data: Course): boolean => {
+    const { name, group, shift } = data;
+
+    if (!name || !shift || !group) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const insertNewCurso = async (data: Course) => {
     const status = await insertCurso(data);
     setStatus({ status: status });
     window.location.reload();
@@ -88,7 +99,11 @@ export default function Cursos() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    insertNewCurso(info);
+    if (validationCourse(info)) {
+      insertNewCurso(info);
+    } else {
+      console.log("Invalido!");
+    }
   };
 
   const columns = [

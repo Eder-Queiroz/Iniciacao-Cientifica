@@ -5,10 +5,11 @@ import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertRestricao, getRestricao, getProfessor } from "../../api/api";
 import Select from "react-select";
+import { Restrictions } from "../../types/types";
 
 function Restrições() {
   const [modal, setModal] = useState(false);
-  const [info, setInfo] = useState({
+  const [info, setInfo] = useState<Restrictions>({
     teacher: "",
     day: "segunda-feira",
     time: "manhã",
@@ -18,7 +19,17 @@ function Restrições() {
   const [professors, setProfessors] = useState<object[]>([]);
   const [status, setStatus] = useState({});
 
-  const insertNewRestricao = async (data: object) => {
+  const validationRestriction = (data: Restrictions): boolean => {
+    const { teacher, day, time } = data;
+
+    if (!teacher || !day || !time) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const insertNewRestricao = async (data: Restrictions) => {
     const status = await insertRestricao(data);
     setStatus({ status: status });
     window.location.reload();
@@ -106,7 +117,11 @@ function Restrições() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    insertNewRestricao(info);
+    if (validationRestriction(info)) {
+      insertNewRestricao(info);
+    } else {
+      console.log("Invalido!");
+    }
   };
 
   const columns = [

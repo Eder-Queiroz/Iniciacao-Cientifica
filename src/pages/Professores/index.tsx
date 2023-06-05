@@ -4,17 +4,27 @@ import InsertModal from "../../components/InsertModal";
 import { useState, useEffect } from "react";
 import { Button, InputGroup, InputGroupText } from "reactstrap";
 import { getProfessor, insertProfessor } from "../../api/api";
+import { Professor } from "../../types/types";
 
 function Professores() {
   const [modal, setModal] = useState(false);
-  const [info, setInfo] = useState({
+  const [info, setInfo] = useState<Professor>({
     name: "",
     email: "",
   });
   const [professor, setProfessor] = useState([]);
   const [status, setStatus] = useState({});
 
-  const insertNewProfessor = async (data: object) => {
+  const validationProfessor = (data: Professor): boolean => {
+    const { name, email } = data;
+
+    if (!name || !email) {
+      return false;
+    }
+    return true;
+  };
+
+  const insertNewProfessor = async (data: Professor) => {
     const status = await insertProfessor(data);
     setStatus({ status: status });
     window.location.reload();
@@ -62,7 +72,11 @@ function Professores() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    insertNewProfessor(info);
+    if (validationProfessor(info)) {
+      insertNewProfessor(info);
+    } else {
+      console.log("Invalido!");
+    }
   };
 
   const columns = [

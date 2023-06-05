@@ -5,10 +5,11 @@ import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertTurma, getTurma, getCurso } from "../../api/api";
 import Select from "react-select";
+import { Classe } from "../../types/types";
 
 function Turmas() {
   const [modal, setModal] = useState(false);
-  const [info, setInfo] = useState({
+  const [info, setInfo] = useState<Classe>({
     course: "",
     period: "1º",
     number_students: "",
@@ -18,7 +19,17 @@ function Turmas() {
   const [courses, setCourses] = useState<object[]>([]);
   const [status, setStatus] = useState({});
 
-  const insertNewTurma = async (data: object) => {
+  const validationClasse = (data: Classe): boolean => {
+    const { course, period, number_students } = data;
+
+    if (!course || !period || !number_students) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const insertNewTurma = async (data: Classe) => {
     const status = await insertTurma(data);
     setStatus({ status: status });
     window.location.reload();
@@ -114,7 +125,11 @@ function Turmas() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    insertNewTurma(info);
+    if (validationClasse(info)) {
+      insertNewTurma(info);
+    } else {
+      console.log("Invalido!");
+    }
   };
 
   const columns = [

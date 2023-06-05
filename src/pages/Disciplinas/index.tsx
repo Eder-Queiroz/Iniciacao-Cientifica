@@ -10,10 +10,11 @@ import {
   getCurso,
 } from "../../api/api";
 import Select from "react-select";
+import { Subject } from "../../types/types";
 
 function Disciplinas() {
   const [modal, setModal] = useState(false);
-  const [info, setInfo] = useState({
+  const [info, setInfo] = useState<Subject>({
     subject: "",
     teacher: "",
     course: "",
@@ -26,7 +27,17 @@ function Disciplinas() {
   const [courses, setCourses] = useState<object[]>([]);
   const [status, setStatus] = useState({});
 
-  const insertNewDisciplina = async (data: object) => {
+  const validationSubject = (data: Subject): boolean => {
+    const { subject, teacher, course, period, number_classes } = data;
+
+    if (!subject || !teacher || !course || !period || !number_classes) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const insertNewDisciplina = async (data: Subject) => {
     const status = await insertDisciplina(data);
     setStatus({ status: status });
     window.location.reload();
@@ -181,7 +192,11 @@ function Disciplinas() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    insertNewDisciplina(info);
+    if (validationSubject(info)) {
+      insertNewDisciplina(info);
+    } else {
+      console.log("Invalido!");
+    }
   };
 
   const columns = [
