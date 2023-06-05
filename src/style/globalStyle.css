@@ -18,6 +18,11 @@
     margin-left: 1rem;
 }
 
+.border-select > .select__control {
+    border-color: none I !important;
+    border-style: none !important;
+}
+
 @media screen and (max-width: 768px) {
     .nav{
         align-items: center;

@@ -1,16 +1,16 @@
 import TableWithSearch from "../../components/TableWithSearch/TableWithSearch";
 import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
-import {insertCurso,getCurso} from '../../api/api'
+import { insertCurso, getCurso } from "../../api/api";
 
 export default function Cursos() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState({
-    name: '', 
-    shift: 'matutino',
-    grouping: '1', 
+    name: "",
+    shift: "matutino",
+    grouping: "1",
   });
 
   const [curso, setCurso] = useState([]);
@@ -35,7 +35,12 @@ export default function Cursos() {
       component: (
         <InputGroup>
           <InputGroupText>Nome</InputGroupText>
-          <Input type="text" onChange={(e) => setInfo((prevState) => ({...prevState ,name: e.target.value}))} />
+          <Input
+            type="text"
+            onChange={(e) =>
+              setInfo((prevState) => ({ ...prevState, name: e.target.value }))
+            }
+          />
         </InputGroup>
       ),
     },
@@ -44,19 +49,35 @@ export default function Cursos() {
         <div className="d-flex gap-3">
           <InputGroup className="w-50">
             <InputGroupText>Turno</InputGroupText>
-            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,shift: e.target.value}))} >
-              <option value='matutino'>Matutino</option>
-              <option value='vespertino'>Vespertino</option>
-              <option value='noturno'>Noturno</option>
-              <option value='integral'>Integral</option>
+            <Input
+              type="select"
+              onChange={(e) =>
+                setInfo((prevState) => ({
+                  ...prevState,
+                  shift: e.target.value,
+                }))
+              }
+            >
+              <option value="matutino">Matutino</option>
+              <option value="vespertino">Vespertino</option>
+              <option value="noturno">Noturno</option>
+              <option value="integral">Integral</option>
             </Input>
           </InputGroup>
           <InputGroup className="w-50">
             <InputGroupText>Grupo</InputGroupText>
-            <Input type="select" onChange={(e) => setInfo((prevState) => ({...prevState ,grouping: e.target.value}))} >
-              <option value='1'>1</option>
-              <option value='2'>2</option>
-              <option value='3'>3</option>
+            <Input
+              type="select"
+              onChange={(e) =>
+                setInfo((prevState) => ({
+                  ...prevState,
+                  grouping: e.target.value,
+                }))
+              }
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
             </Input>
           </InputGroup>
         </div>
@@ -64,7 +85,7 @@ export default function Cursos() {
     },
   ];
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     insertNewCurso(info);
     window.location.reload();
@@ -92,7 +113,7 @@ export default function Cursos() {
       },
     },
     {
-      dataField: "grouping",
+      dataField: "group",
       text: "Grupo",
       sort: true,
       style: {
