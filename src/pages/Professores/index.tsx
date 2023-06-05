@@ -17,6 +17,7 @@ function Professores() {
   const insertNewProfessor = async (data: object) => {
     const status = await insertProfessor(data);
     setStatus({ status: status });
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -62,7 +63,6 @@ function Professores() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     insertNewProfessor(info);
-    window.location.reload();
   };
 
   const columns = [

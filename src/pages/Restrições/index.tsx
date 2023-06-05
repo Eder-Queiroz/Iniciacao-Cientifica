@@ -21,11 +21,14 @@ function Restrições() {
   const insertNewRestricao = async (data: object) => {
     const status = await insertRestricao(data);
     setStatus({ status: status });
+    window.location.reload();
   };
 
   const loadProfessor = async () => {
     const response = await getProfessor();
-    const newProfessors: object[] = [];
+    const newProfessors: object[] = [
+      { value: "none", label: "selecione um professor", disabled: true },
+    ];
     response.map((professor: any) => {
       newProfessors.push({ value: professor.name, label: professor.name });
     });
@@ -55,6 +58,10 @@ function Restrições() {
             isSearchable={true}
             name="teacher"
             options={professors}
+            isOptionDisabled={(option: any) => option.disabled}
+            onChange={(e: any) => {
+              setInfo((prevState) => ({ ...prevState, teacher: e.value }));
+            }}
           />
         </InputGroup>
       ),
@@ -100,7 +107,6 @@ function Restrições() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     insertNewRestricao(info);
-    window.location.reload();
   };
 
   const columns = [

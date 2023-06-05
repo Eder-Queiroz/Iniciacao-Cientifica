@@ -10,7 +10,7 @@ export default function Cursos() {
   const [info, setInfo] = useState({
     name: "",
     shift: "matutino",
-    grouping: "1",
+    group: "1",
   });
 
   const [curso, setCurso] = useState([]);
@@ -19,6 +19,7 @@ export default function Cursos() {
   const insertNewCurso = async (data: object) => {
     const status = await insertCurso(data);
     setStatus({ status: status });
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -71,7 +72,7 @@ export default function Cursos() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  grouping: e.target.value,
+                  group: e.target.value,
                 }))
               }
             >
@@ -88,7 +89,6 @@ export default function Cursos() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     insertNewCurso(info);
-    window.location.reload();
   };
 
   const columns = [

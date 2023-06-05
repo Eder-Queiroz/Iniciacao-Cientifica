@@ -14,11 +14,11 @@ import Select from "react-select";
 function Disciplinas() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState({
-    name: "",
-    course: "EC",
-    period: "1",
-    numberClasses: "1",
+    subject: "",
     teacher: "",
+    course: "",
+    period: "1º",
+    number_classes: "1",
   });
 
   const [discplina, setDiscplina] = useState([]);
@@ -29,11 +29,14 @@ function Disciplinas() {
   const insertNewDisciplina = async (data: object) => {
     const status = await insertDisciplina(data);
     setStatus({ status: status });
+    window.location.reload();
   };
 
   const loadProfessor = async () => {
     const response = await getProfessor();
-    const newProfessors: object[] = [];
+    const newProfessors: object[] = [
+      { value: "none", label: "selecione um professor", disabled: true },
+    ];
     response.map((professor: any) => {
       newProfessors.push({ value: professor.name, label: professor.name });
     });
@@ -41,7 +44,9 @@ function Disciplinas() {
   };
   const loadCourse = async () => {
     const response = await getCurso();
-    const newCourse: object[] = [];
+    const newCourse: object[] = [
+      { value: "none", label: "Selecione um curso", disabled: true },
+    ];
 
     response.map((course: any) => {
       newCourse.push({ value: course.name, label: course.name });
@@ -69,7 +74,10 @@ function Disciplinas() {
           <Input
             type="text"
             onChange={(e) =>
-              setInfo((prevState) => ({ ...prevState, name: e.target.value }))
+              setInfo((prevState) => ({
+                ...prevState,
+                subject: e.target.value,
+              }))
             }
           />
         </InputGroup>
@@ -87,6 +95,10 @@ function Disciplinas() {
             isSearchable={true}
             name="teacher"
             options={professors}
+            isOptionDisabled={(option: any) => option.disabled}
+            onChange={(e: any) => {
+              setInfo((prevState) => ({ ...prevState, teacher: e.value }));
+            }}
           />
         </InputGroup>
       ),
@@ -103,6 +115,10 @@ function Disciplinas() {
             isSearchable={true}
             name="course"
             options={courses}
+            isOptionDisabled={(option: any) => option.disabled}
+            onChange={(e: any) => {
+              setInfo((prevState) => ({ ...prevState, course: e.value }));
+            }}
           />
         </InputGroup>
       ),
@@ -114,7 +130,7 @@ function Disciplinas() {
             <InputGroupText>Período</InputGroupText>
             <Input
               type="select"
-              defaultValue="1"
+              defaultValue="1°"
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
@@ -122,16 +138,16 @@ function Disciplinas() {
                 }))
               }
             >
-              <option value="1">1°</option>
-              <option value="2">2°</option>
-              <option value="3">3°</option>
-              <option value="4">4°</option>
-              <option value="5">5°</option>
-              <option value="6">6°</option>
-              <option value="7">7°</option>
-              <option value="8">8°</option>
-              <option value="9">9°</option>
-              <option value="10">10°</option>
+              <option value="1°">1°</option>
+              <option value="2°">2°</option>
+              <option value="3°">3°</option>
+              <option value="4°">4°</option>
+              <option value="5°">5°</option>
+              <option value="6°">6°</option>
+              <option value="7°">7°</option>
+              <option value="8°">8°</option>
+              <option value="9°">9°</option>
+              <option value="10°">10°</option>
             </Input>
           </InputGroup>
           <InputGroup className="w-50">
@@ -142,7 +158,7 @@ function Disciplinas() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  numberClasses: e.target.value,
+                  number_classes: e.target.value,
                 }))
               }
             >
@@ -166,7 +182,6 @@ function Disciplinas() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     insertNewDisciplina(info);
-    window.location.reload();
   };
 
   const columns = [
