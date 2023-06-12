@@ -6,6 +6,7 @@ import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertRestricao, getRestricao, getProfessor } from "../../api/api";
 import Select from "react-select";
 import { Restrictions } from "../../types/types";
+import {toast} from "react-toastify"
 
 function Restrições() {
   const [modal, setModal] = useState(false);
@@ -32,7 +33,7 @@ function Restrições() {
   const insertNewRestricao = async (data: Restrictions) => {
     const status = await insertRestricao(data);
     setStatus({ status: status });
-    window.location.reload();
+    setModal(!modal);
   };
 
   const loadProfessor = async () => {
@@ -54,7 +55,7 @@ function Restrições() {
 
     loadRestricao();
     loadProfessor();
-  }, []);
+  }, [restriçao]);
 
   const dados = [
     {
@@ -119,8 +120,14 @@ function Restrições() {
     e.preventDefault();
     if (validationRestriction(info)) {
       insertNewRestricao(info);
+      if({status:200}){
+        toast.success("Restrição Adicionada com sucesso");
+      }
+      else{
+        toast.error("Erro ao adicionar Restrição");
+      }
     } else {
-      console.log("Invalido!");
+      toast.warn("Inválido, preencha os campos!")
     }
   };
 

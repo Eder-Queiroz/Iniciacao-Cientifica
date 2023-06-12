@@ -11,6 +11,7 @@ import {
 } from "../../api/api";
 import Select from "react-select";
 import { Subject } from "../../types/types";
+import {toast} from "react-toastify"
 
 function Disciplinas() {
   const [modal, setModal] = useState(false);
@@ -40,7 +41,7 @@ function Disciplinas() {
   const insertNewDisciplina = async (data: Subject) => {
     const status = await insertDisciplina(data);
     setStatus({ status: status });
-    window.location.reload();
+    setModal(!modal);
   };
 
   const loadProfessor = async () => {
@@ -75,7 +76,7 @@ function Disciplinas() {
     loadDiscplina();
     loadProfessor();
     loadCourse();
-  }, []);
+  }, [discplina]);
 
   const dados = [
     {
@@ -194,8 +195,14 @@ function Disciplinas() {
     e.preventDefault();
     if (validationSubject(info)) {
       insertNewDisciplina(info);
+      if({status:200}){
+        toast.success(`${info.subject} adicionado com sucesso!`);
+      }
+      else{
+        toast.error(`Erro ao adicionar ${info.subject}!`);
+      }
     } else {
-      console.log("Invalido!");
+      toast.warn("Inválido, preencha os campos!")
     }
   };
 

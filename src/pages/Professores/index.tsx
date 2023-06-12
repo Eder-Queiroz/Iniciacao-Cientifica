@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Button, InputGroup, InputGroupText } from "reactstrap";
 import { getProfessor, insertProfessor } from "../../api/api";
 import { Professor } from "../../types/types";
+import {toast} from "react-toastify"
 
 function Professores() {
   const [modal, setModal] = useState(false);
@@ -27,7 +28,7 @@ function Professores() {
   const insertNewProfessor = async (data: Professor) => {
     const status = await insertProfessor(data);
     setStatus({ status: status });
-    window.location.reload();
+    setModal(!modal);
   };
 
   useEffect(() => {
@@ -37,7 +38,7 @@ function Professores() {
     };
 
     loadProfessor();
-  }, []);
+  }, [professor]);
 
   const dados = [
     {
@@ -74,8 +75,14 @@ function Professores() {
     e.preventDefault();
     if (validationProfessor(info)) {
       insertNewProfessor(info);
+      if({status:200}){
+        toast.success(`${info.name} adicionado com sucesso!`);
+      }
+      else{
+        toast.error(`Erro ao adicionar ${info.name}!`);
+      }
     } else {
-      console.log("Invalido!");
+      toast.warn("Inválido, preencha os campos!")
     }
   };
 

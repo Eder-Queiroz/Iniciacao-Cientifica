@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertCurso, getCurso } from "../../api/api";
 import { Course } from "../../types/types";
+import {toast} from "react-toastify"
 
 export default function Cursos() {
   const [modal, setModal] = useState(false);
@@ -30,7 +31,7 @@ export default function Cursos() {
   const insertNewCurso = async (data: Course) => {
     const status = await insertCurso(data);
     setStatus({ status: status });
-    window.location.reload();
+    setModal(!modal);
   };
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function Cursos() {
     };
 
     loadCurso();
-  }, []);
+  }, [curso]);
 
   const dados = [
     {
@@ -101,8 +102,14 @@ export default function Cursos() {
     e.preventDefault();
     if (validationCourse(info)) {
       insertNewCurso(info);
+      if({status:200}){
+        toast.success(`${info.name} adicionado com sucesso!`);
+      }
+      else{
+        toast.error(`Erro ao adicionar ${info.name}!`);
+      }
     } else {
-      console.log("Invalido!");
+      toast.warn("Inválido, preencha os campos!")
     }
   };
 

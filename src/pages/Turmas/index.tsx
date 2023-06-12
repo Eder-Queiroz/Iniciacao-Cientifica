@@ -6,6 +6,7 @@ import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertTurma, getTurma, getCurso } from "../../api/api";
 import Select from "react-select";
 import { Classe } from "../../types/types";
+import {toast} from "react-toastify"
 
 function Turmas() {
   const [modal, setModal] = useState(false);
@@ -32,7 +33,7 @@ function Turmas() {
   const insertNewTurma = async (data: Classe) => {
     const status = await insertTurma(data);
     setStatus({ status: status });
-    window.location.reload();
+    setModal(!modal);
   };
 
   const loadCourse = async () => {
@@ -56,7 +57,7 @@ function Turmas() {
 
     loadTurma();
     loadCourse();
-  }, []);
+  }, [turma]);
 
   const dados = [
     {
@@ -127,8 +128,14 @@ function Turmas() {
     e.preventDefault();
     if (validationClasse(info)) {
       insertNewTurma(info);
+      if({status:200}){
+        toast.success("Turma adicionada com sucesso!");
+      }
+      else{
+        toast.error("Erro ao adicionar Turma!");
+      }
     } else {
-      console.log("Invalido!");
+      toast.warn("Inválido, preencha os campos!")
     }
   };
 
