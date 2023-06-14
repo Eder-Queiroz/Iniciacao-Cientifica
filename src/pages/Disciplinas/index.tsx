@@ -12,6 +12,7 @@ import {
 import Select from "react-select";
 import { Subject } from "../../types/types";
 import {toast} from "react-toastify"
+import { stat } from "fs";
 
 function Disciplinas() {
   const [modal, setModal] = useState(false);
@@ -26,7 +27,7 @@ function Disciplinas() {
   const [discplina, setDiscplina] = useState([]);
   const [professors, setProfessors] = useState<object[]>([]);
   const [courses, setCourses] = useState<object[]>([]);
-  const [status, setStatus] = useState({});
+  const [status, setStatus] = useState<number>();
 
   const validationSubject = (data: Subject): boolean => {
     const { subject, teacher, course, period, number_classes } = data;
@@ -40,7 +41,7 @@ function Disciplinas() {
 
   const insertNewDisciplina = async (data: Subject) => {
     const status = await insertDisciplina(data);
-    setStatus({ status: status });
+    setStatus(status);
     setModal(!modal);
   };
 
@@ -195,7 +196,7 @@ function Disciplinas() {
     e.preventDefault();
     if (validationSubject(info)) {
       insertNewDisciplina(info);
-      if({status:200}){
+      if(status == 200){
         toast.success(`${info.subject} adicionado com sucesso!`);
       }
       else{

@@ -18,7 +18,7 @@ function Turmas() {
 
   const [turma, setTurma] = useState([]);
   const [courses, setCourses] = useState<object[]>([]);
-  const [status, setStatus] = useState({});
+  const [status, setStatus] = useState<number>();
 
   const validationClasse = (data: Classe): boolean => {
     const { course, period, number_students } = data;
@@ -32,7 +32,7 @@ function Turmas() {
 
   const insertNewTurma = async (data: Classe) => {
     const status = await insertTurma(data);
-    setStatus({ status: status });
+    setStatus(status);
     setModal(!modal);
   };
 
@@ -128,7 +128,7 @@ function Turmas() {
     e.preventDefault();
     if (validationClasse(info)) {
       insertNewTurma(info);
-      if({status:200}){
+      if(status == 200){
         toast.success("Turma adicionada com sucesso!");
       }
       else{

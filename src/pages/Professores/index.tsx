@@ -14,7 +14,7 @@ function Professores() {
     email: "",
   });
   const [professor, setProfessor] = useState([]);
-  const [status, setStatus] = useState({});
+  const [status, setStatus] = useState<number>();
 
   const validationProfessor = (data: Professor): boolean => {
     const { name, email } = data;
@@ -27,7 +27,7 @@ function Professores() {
 
   const insertNewProfessor = async (data: Professor) => {
     const status = await insertProfessor(data);
-    setStatus({ status: status });
+    setStatus(status );
     setModal(!modal);
   };
 
@@ -75,7 +75,7 @@ function Professores() {
     e.preventDefault();
     if (validationProfessor(info)) {
       insertNewProfessor(info);
-      if({status:200}){
+      if(status == 200){
         toast.success(`${info.name} adicionado com sucesso!`);
       }
       else{

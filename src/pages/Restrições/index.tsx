@@ -18,7 +18,7 @@ function Restrições() {
 
   const [restriçao, setRestricao] = useState([]);
   const [professors, setProfessors] = useState<object[]>([]);
-  const [status, setStatus] = useState({});
+  const [status, setStatus] = useState<number>();
 
   const validationRestriction = (data: Restrictions): boolean => {
     const { teacher, day, time } = data;
@@ -32,7 +32,7 @@ function Restrições() {
 
   const insertNewRestricao = async (data: Restrictions) => {
     const status = await insertRestricao(data);
-    setStatus({ status: status });
+    setStatus(status );
     setModal(!modal);
   };
 
@@ -120,7 +120,7 @@ function Restrições() {
     e.preventDefault();
     if (validationRestriction(info)) {
       insertNewRestricao(info);
-      if({status:200}){
+      if(status == 200){
         toast.success("Restrição Adicionada com sucesso");
       }
       else{

@@ -6,6 +6,7 @@ import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertCurso, getCurso } from "../../api/api";
 import { Course } from "../../types/types";
 import {toast} from "react-toastify"
+import { any } from "zod";
 
 export default function Cursos() {
   const [modal, setModal] = useState(false);
@@ -16,7 +17,7 @@ export default function Cursos() {
   });
 
   const [curso, setCurso] = useState([]);
-  const [status, setStatus] = useState({});
+  const [status, setStatus] = useState<number>();
 
   const validationCourse = (data: Course): boolean => {
     const { name, group, shift } = data;
@@ -30,7 +31,7 @@ export default function Cursos() {
 
   const insertNewCurso = async (data: Course) => {
     const status = await insertCurso(data);
-    setStatus({ status: status });
+    setStatus(status);
     setModal(!modal);
   };
 
@@ -102,7 +103,7 @@ export default function Cursos() {
     e.preventDefault();
     if (validationCourse(info)) {
       insertNewCurso(info);
-      if({status:200}){
+      if(status == 200){
         toast.success(`${info.name} adicionado com sucesso!`);
       }
       else{
