@@ -28,3 +28,9 @@ export interface Restrictions {
     day: string,
     time: string
 }
+
+export interface Room {
+    rooms: string,
+    capacity: string,
+    number_computers: string
+}

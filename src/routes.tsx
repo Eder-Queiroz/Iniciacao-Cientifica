@@ -8,6 +8,7 @@ import Disciplinas from "./pages/Disciplinas";
 import Professores from "./pages/Professores";
 import Restrições from "./pages/Restrições";
 import Turmas from "./pages/Turmas";
+import Salas from "./pages/Salas";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "/turmas",
         element: <Turmas />,
+      },
+      {
+        path: "/salas",
+        element: <Salas />,
       },
     ],
   },

@@ -20,13 +20,10 @@ export const getProfessor = async () => {
 export const insertProfessor = async (data:object) => {
 
     try {
-
         const {status} = await api.post('/professors', data);
         return status;
     }catch(error) {
-
         console.error("Error while inserting professor: ", error);
-
     }
 
 }
@@ -109,4 +106,26 @@ export const insertRestricao = async (data:object) => {
     }catch(error){
         console.error("Error while insertinng Restrição: ", error);
     }
+}
+
+export const getSala = async () => {
+
+    try{
+        const {data} = await api.get('/sala');
+        return data;
+    }catch(error) {
+        console.error("Error while getting sala: ", error);
+    }
+
+}
+
+export const insertSala = async (data:object) => {
+
+    try {
+        const {status} = await api.post('/sala', data);
+        return status;
+    }catch(error) {
+        console.error("Error while inserting sala: ", error);
+    }
+
 }

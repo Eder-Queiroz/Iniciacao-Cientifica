@@ -47,6 +47,9 @@ export default function Navigator() {
               <Link to="/restricoes" className="nav-link">
                 Restrições
               </Link>
+              <Link to="/salas" className="nav-link">
+                Salas
+              </Link>
             </div>
             <Link to="/grade" className="nav-link">
               <Button color="primary">Gerar grade</Button>
@@ -75,6 +78,9 @@ export default function Navigator() {
               </Link>
               <Link className="nav-link" to="/restricoes">
                 Restrições
+              </Link>
+              <Link className="nav-link" to="/salas">
+                Salas
               </Link>
               <Link className="nav-link" to="/grade">
                 <Button color="primary">Gerar grade</Button>
