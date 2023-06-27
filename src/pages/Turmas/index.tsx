@@ -6,14 +6,14 @@ import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertTurma, getTurma, getCurso } from "../../api/api";
 import Select from "react-select";
 import { Classe } from "../../types/types";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 
 function Turmas() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState<Classe>({
-    course: "",
-    period: "1º",
-    number_students: "",
+    curso_id: "",
+    periodo: 1,
+    qtalunos: 0,
   });
 
   const [turma, setTurma] = useState([]);
@@ -21,9 +21,9 @@ function Turmas() {
   const [status, setStatus] = useState<number>();
 
   const validationClasse = (data: Classe): boolean => {
-    const { course, period, number_students } = data;
+    const { curso_id, periodo, qtalunos } = data;
 
-    if (!course || !period || !number_students) {
+    if (!curso_id || !periodo || !qtalunos) {
       return false;
     }
 
@@ -43,7 +43,7 @@ function Turmas() {
     ];
 
     response.map((course: any) => {
-      newCourse.push({ value: course.name, label: course.name });
+      newCourse.push({ value: course.id, label: course.nome });
     });
 
     setCourses(newCourse);
@@ -57,7 +57,7 @@ function Turmas() {
 
     loadTurma();
     loadCourse();
-  }, [turma]);
+  }, []);
 
   const dados = [
     {
@@ -74,7 +74,7 @@ function Turmas() {
             options={courses}
             isOptionDisabled={(option: any) => option.disabled}
             onChange={(e: any) => {
-              setInfo((prevState) => ({ ...prevState, course: e.value }));
+              setInfo((prevState) => ({ ...prevState, curso_id: e.value }));
             }}
           />
         </InputGroup>
@@ -91,20 +91,20 @@ function Turmas() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  period: e.target.value,
+                  periodo: parseInt(e.target.value),
                 }))
               }
             >
-              <option value="1°">1°</option>
-              <option value="2°">2°</option>
-              <option value="3°">3°</option>
-              <option value="4°">4°</option>
-              <option value="5°">5°</option>
-              <option value="6°">6°</option>
-              <option value="7°">7°</option>
-              <option value="8°">8°</option>
-              <option value="9°">9°</option>
-              <option value="10°">10°</option>
+              <option value="1">1°</option>
+              <option value="2">2°</option>
+              <option value="3">3°</option>
+              <option value="4">4°</option>
+              <option value="5">5°</option>
+              <option value="6">6°</option>
+              <option value="7">7°</option>
+              <option value="8">8°</option>
+              <option value="9">9°</option>
+              <option value="10">10°</option>
             </Input>
           </InputGroup>
           <InputGroup className="w-50">
@@ -114,7 +114,7 @@ function Turmas() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  number_students: e.target.value,
+                  qtalunos: parseInt(e.target.value),
                 }))
               }
             />
@@ -128,20 +128,19 @@ function Turmas() {
     e.preventDefault();
     if (validationClasse(info)) {
       insertNewTurma(info);
-      if(status == 200){
+      if (status == 200) {
         toast.success("Turma adicionada com sucesso!");
-      }
-      else{
+      } else {
         toast.error("Erro ao adicionar Turma!");
       }
     } else {
-      toast.warn("Inválido, preencha os campos!")
+      toast.warn("Inválido, preencha os campos!");
     }
   };
 
   const columns = [
     {
-      dataField: "course",
+      dataField: "curso",
       text: "Curso",
       sort: true,
       filter: textFilter({
@@ -153,7 +152,7 @@ function Turmas() {
       },
     },
     {
-      dataField: "period",
+      dataField: "periodo",
       text: "Período",
       sort: true,
       style: {
@@ -161,7 +160,7 @@ function Turmas() {
       },
     },
     {
-      dataField: "number_students",
+      dataField: "qtalunos",
       text: "Quantidade de Alunos",
       sort: true,
       style: {
@@ -180,7 +179,14 @@ function Turmas() {
       >
         Adicionar turma
       </Button>
-      <TableWithSearch data={turma} columns={columns} />
+      <TableWithSearch
+        data={turma.map((unicaTurma) => ({
+          curso: unicaTurma["curso"]["nome"],
+          periodo: unicaTurma["periodo"],
+          qtalunos: unicaTurma["qtalunos"],
+        }))}
+        columns={columns}
+      />
 
       <InsertModal
         open={modal}

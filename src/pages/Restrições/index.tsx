@@ -6,14 +6,14 @@ import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertRestricao, getRestricao, getProfessor } from "../../api/api";
 import Select from "react-select";
 import { Restrictions } from "../../types/types";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 
 function Restrições() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState<Restrictions>({
-    teacher: "",
-    day: "segunda-feira",
-    time: "manhã",
+    professor_id: "",
+    dia: "segunda-feira",
+    periodo: 1,
   });
 
   const [restriçao, setRestricao] = useState([]);
@@ -21,9 +21,9 @@ function Restrições() {
   const [status, setStatus] = useState<number>();
 
   const validationRestriction = (data: Restrictions): boolean => {
-    const { teacher, day, time } = data;
+    const { professor_id, dia, periodo } = data;
 
-    if (!teacher || !day || !time) {
+    if (!professor_id || !dia || !periodo) {
       return false;
     }
 
@@ -32,7 +32,7 @@ function Restrições() {
 
   const insertNewRestricao = async (data: Restrictions) => {
     const status = await insertRestricao(data);
-    setStatus(status );
+    setStatus(status);
     setModal(!modal);
   };
 
@@ -42,7 +42,7 @@ function Restrições() {
       { value: "none", label: "selecione um professor", disabled: true },
     ];
     response.map((professor: any) => {
-      newProfessors.push({ value: professor.name, label: professor.name });
+      newProfessors.push({ value: professor.id, label: professor.nome });
     });
     setProfessors(newProfessors);
   };
@@ -55,7 +55,7 @@ function Restrições() {
 
     loadRestricao();
     loadProfessor();
-  }, [restriçao]);
+  }, []);
 
   const dados = [
     {
@@ -72,7 +72,7 @@ function Restrições() {
             options={professors}
             isOptionDisabled={(option: any) => option.disabled}
             onChange={(e: any) => {
-              setInfo((prevState) => ({ ...prevState, teacher: e.value }));
+              setInfo((prevState) => ({ ...prevState, professor_id: e.value }));
             }}
           />
         </InputGroup>
@@ -87,7 +87,7 @@ function Restrições() {
               type="select"
               defaultValue="segunda-feira"
               onChange={(e) =>
-                setInfo((prevState) => ({ ...prevState, day: e.target.value }))
+                setInfo((prevState) => ({ ...prevState, dia: e.target.value }))
               }
             >
               <option value="segunda-feira">Segunda-Feira</option>
@@ -103,12 +103,15 @@ function Restrições() {
               type="select"
               defaultValue="manhã"
               onChange={(e) =>
-                setInfo((prevState) => ({ ...prevState, time: e.target.value }))
+                setInfo((prevState) => ({
+                  ...prevState,
+                  periodo: parseInt(e.target.value),
+                }))
               }
             >
-              <option value="manhã">Manhã</option>
-              <option value="tarde">Tarde</option>
-              <option value="noite">Noite</option>
+              <option value="1">Manhã</option>
+              <option value="2">Tarde</option>
+              <option value="3">Noite</option>
             </Input>
           </InputGroup>
         </div>
@@ -120,14 +123,13 @@ function Restrições() {
     e.preventDefault();
     if (validationRestriction(info)) {
       insertNewRestricao(info);
-      if(status == 200){
+      if (status == 200) {
         toast.success("Restrição Adicionada com sucesso");
-      }
-      else{
+      } else {
         toast.error("Erro ao adicionar Restrição");
       }
     } else {
-      toast.warn("Inválido, preencha os campos!")
+      toast.warn("Inválido, preencha os campos!");
     }
   };
 
@@ -145,7 +147,7 @@ function Restrições() {
       },
     },
     {
-      dataField: "day",
+      dataField: "dia",
       text: "Dia",
       sort: true,
       style: {
@@ -153,7 +155,7 @@ function Restrições() {
       },
     },
     {
-      dataField: "time",
+      dataField: "periodo",
       text: "Horário",
       sort: true,
       style: {
@@ -172,7 +174,14 @@ function Restrições() {
       >
         Adicionar restrição
       </Button>
-      <TableWithSearch data={restriçao} columns={columns} />
+      <TableWithSearch
+        data={restriçao.map((unicaRestricao) => ({
+          teacher: unicaRestricao["professor"]["nome"],
+          dia: unicaRestricao["dia"],
+          periodo: unicaRestricao["periodo"],
+        }))}
+        columns={columns}
+      />
 
       <InsertModal
         open={modal}

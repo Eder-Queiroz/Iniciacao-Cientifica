@@ -5,23 +5,23 @@ import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertSala, getSala } from "../../api/api";
 import { Room } from "../../types/types";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 
 function Salas() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState<Room>({
-    rooms: "",
-    capacity: "1º",
-    number_computers: "",
+    nome: "",
+    capacidade: 1,
+    qtdpcs: 0,
   });
 
   const [rooms, setRooms] = useState([]);
   const [status, setStatus] = useState<number>();
 
   const validationClasse = (data: Room): boolean => {
-    const { rooms, capacity, number_computers } = data;
+    const { nome, capacidade, qtdpcs } = data;
 
-    if (!rooms || !capacity || !number_computers) {
+    if (!nome || !capacidade || !qtdpcs) {
       return false;
     }
 
@@ -41,20 +41,19 @@ function Salas() {
     };
 
     loadSala();
-    
-  }, [rooms]);
+  }, []);
 
   const dados = [
     {
       component: (
         <InputGroup>
           <InputGroupText>Sala</InputGroupText>
-          <Input 
+          <Input
             type="text"
             onChange={(e) =>
               setInfo((prevState) => ({
                 ...prevState,
-                room: e.target.value,
+                nome: e.target.value,
               }))
             }
           />
@@ -71,7 +70,7 @@ function Salas() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  capacity: e.target.value,
+                  capacidade: parseInt(e.target.value),
                 }))
               }
             />
@@ -83,7 +82,7 @@ function Salas() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  number_computers: e.target.value,
+                  qtdpcs: parseInt(e.target.value),
                 }))
               }
             />
@@ -97,20 +96,19 @@ function Salas() {
     e.preventDefault();
     if (validationClasse(info)) {
       insertNewSala(info);
-      if(status == 200){
+      if (status == 200) {
         toast.success("Turma adicionada com sucesso!");
-      }
-      else{
+      } else {
         toast.error("Erro ao adicionar Turma!");
       }
     } else {
-      toast.warn("Inválido, preencha os campos!")
+      toast.warn("Inválido, preencha os campos!");
     }
   };
 
   const columns = [
     {
-      dataField: "rooms",
+      dataField: "nome",
       text: "Salas",
       sort: true,
       filter: textFilter({
@@ -122,7 +120,7 @@ function Salas() {
       },
     },
     {
-      dataField: "capacity",
+      dataField: "capacidade",
       text: "Capacidade",
       sort: true,
       style: {
@@ -130,7 +128,7 @@ function Salas() {
       },
     },
     {
-      dataField: "number_computers",
+      dataField: "qtdpcs",
       text: "Quantidade de Computadores",
       sort: true,
       style: {

@@ -11,17 +11,17 @@ import {
 } from "../../api/api";
 import Select from "react-select";
 import { Subject } from "../../types/types";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 import { stat } from "fs";
 
 function Disciplinas() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState<Subject>({
-    subject: "",
-    teacher: "",
-    course: "",
-    period: "1º",
-    number_classes: "1",
+    nome: "",
+    professor_id: "",
+    curso_id: "",
+    periodo: 1,
+    qtaulas: 1,
   });
 
   const [discplina, setDiscplina] = useState([]);
@@ -30,9 +30,9 @@ function Disciplinas() {
   const [status, setStatus] = useState<number>();
 
   const validationSubject = (data: Subject): boolean => {
-    const { subject, teacher, course, period, number_classes } = data;
+    const { nome, professor_id, curso_id, periodo, qtaulas } = data;
 
-    if (!subject || !teacher || !course || !period || !number_classes) {
+    if (!nome || !professor_id || !curso_id || !periodo || !qtaulas) {
       return false;
     }
 
@@ -51,7 +51,7 @@ function Disciplinas() {
       { value: "none", label: "selecione um professor", disabled: true },
     ];
     response.map((professor: any) => {
-      newProfessors.push({ value: professor.name, label: professor.name });
+      newProfessors.push({ value: professor.id, label: professor.nome });
     });
     setProfessors(newProfessors);
   };
@@ -62,7 +62,7 @@ function Disciplinas() {
     ];
 
     response.map((course: any) => {
-      newCourse.push({ value: course.name, label: course.name });
+      newCourse.push({ value: course.id, label: course.nome });
     });
 
     setCourses(newCourse);
@@ -77,7 +77,7 @@ function Disciplinas() {
     loadDiscplina();
     loadProfessor();
     loadCourse();
-  }, [discplina]);
+  }, []);
 
   const dados = [
     {
@@ -89,7 +89,7 @@ function Disciplinas() {
             onChange={(e) =>
               setInfo((prevState) => ({
                 ...prevState,
-                subject: e.target.value,
+                nome: e.target.value,
               }))
             }
           />
@@ -110,7 +110,7 @@ function Disciplinas() {
             options={professors}
             isOptionDisabled={(option: any) => option.disabled}
             onChange={(e: any) => {
-              setInfo((prevState) => ({ ...prevState, teacher: e.value }));
+              setInfo((prevState) => ({ ...prevState, professor_id: e.value }));
             }}
           />
         </InputGroup>
@@ -130,7 +130,7 @@ function Disciplinas() {
             options={courses}
             isOptionDisabled={(option: any) => option.disabled}
             onChange={(e: any) => {
-              setInfo((prevState) => ({ ...prevState, course: e.value }));
+              setInfo((prevState) => ({ ...prevState, curso_id: e.value }));
             }}
           />
         </InputGroup>
@@ -147,7 +147,7 @@ function Disciplinas() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  period: e.target.value,
+                  periodo: parseInt(e.target.value),
                 }))
               }
             >
@@ -171,7 +171,7 @@ function Disciplinas() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  number_classes: e.target.value,
+                  qtaulas: parseInt(e.target.value),
                 }))
               }
             >
@@ -196,20 +196,19 @@ function Disciplinas() {
     e.preventDefault();
     if (validationSubject(info)) {
       insertNewDisciplina(info);
-      if(status == 200){
-        toast.success(`${info.subject} adicionado com sucesso!`);
-      }
-      else{
-        toast.error(`Erro ao adicionar ${info.subject}!`);
+      if (status == 200) {
+        toast.success(`${info.nome} adicionado com sucesso!`);
+      } else {
+        toast.error(`Erro ao adicionar ${info.nome}!`);
       }
     } else {
-      toast.warn("Inválido, preencha os campos!")
+      toast.warn("Inválido, preencha os campos!");
     }
   };
 
   const columns = [
     {
-      dataField: "subject",
+      dataField: "nome",
       text: "Nome",
       sort: true,
       filter: textFilter({
@@ -232,7 +231,7 @@ function Disciplinas() {
       },
     },
     {
-      dataField: "period",
+      dataField: "periodo",
       text: "Periodo",
       sort: true,
       style: {
@@ -240,7 +239,7 @@ function Disciplinas() {
       },
     },
     {
-      dataField: "number_classes",
+      dataField: "qtaulas",
       text: "Qnt. Aulas",
       sort: true,
       style: {
@@ -267,7 +266,16 @@ function Disciplinas() {
       >
         Adicionar disciplina
       </Button>
-      <TableWithSearch data={discplina} columns={columns} />
+      <TableWithSearch
+        data={discplina.map((unicaDisciplina) => ({
+          nome: unicaDisciplina["nome"],
+          course: unicaDisciplina["curso"]["nome"],
+          periodo: unicaDisciplina["periodo"],
+          qtaulas: unicaDisciplina["qtaulas"],
+          teacher: unicaDisciplina["professor"]["nome"],
+        }))}
+        columns={columns}
+      />
 
       <InsertModal
         open={modal}

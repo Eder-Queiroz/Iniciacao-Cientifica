@@ -5,24 +5,23 @@ import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertCurso, getCurso } from "../../api/api";
 import { Course } from "../../types/types";
-import {toast} from "react-toastify"
-import { any } from "zod";
+import { toast } from "react-toastify";
 
 export default function Cursos() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState<Course>({
-    name: "",
-    shift: "matutino",
-    group: "1",
+    nome: "",
+    turno: "matutino",
+    agrupamento: 1,
   });
 
   const [curso, setCurso] = useState([]);
   const [status, setStatus] = useState<number>();
 
   const validationCourse = (data: Course): boolean => {
-    const { name, group, shift } = data;
+    const { nome, agrupamento, turno } = data;
 
-    if (!name || !shift || !group) {
+    if (!nome || !turno || !agrupamento) {
       return false;
     }
 
@@ -42,7 +41,7 @@ export default function Cursos() {
     };
 
     loadCurso();
-  }, [curso]);
+  }, []);
 
   const dados = [
     {
@@ -52,7 +51,7 @@ export default function Cursos() {
           <Input
             type="text"
             onChange={(e) =>
-              setInfo((prevState) => ({ ...prevState, name: e.target.value }))
+              setInfo((prevState) => ({ ...prevState, nome: e.target.value }))
             }
           />
         </InputGroup>
@@ -68,7 +67,7 @@ export default function Cursos() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  shift: e.target.value,
+                  turno: e.target.value,
                 }))
               }
             >
@@ -85,7 +84,7 @@ export default function Cursos() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  group: e.target.value,
+                  agrupamento: parseInt(e.target.value),
                 }))
               }
             >
@@ -103,20 +102,19 @@ export default function Cursos() {
     e.preventDefault();
     if (validationCourse(info)) {
       insertNewCurso(info);
-      if(status == 200){
-        toast.success(`${info.name} adicionado com sucesso!`);
-      }
-      else{
-        toast.error(`Erro ao adicionar ${info.name}!`);
+      if (status == 200) {
+        toast.success(`${info.nome} adicionado com sucesso!`);
+      } else {
+        toast.error(`Erro ao adicionar ${info.nome}!`);
       }
     } else {
-      toast.warn("Inválido, preencha os campos!")
+      toast.warn("Inválido, preencha os campos!");
     }
   };
 
   const columns = [
     {
-      dataField: "name",
+      dataField: "nome",
       text: "Nome",
       sort: true,
       filter: textFilter({
@@ -128,7 +126,7 @@ export default function Cursos() {
       },
     },
     {
-      dataField: "shift",
+      dataField: "turno",
       text: "Turno",
       sort: true,
       style: {
@@ -136,7 +134,7 @@ export default function Cursos() {
       },
     },
     {
-      dataField: "group",
+      dataField: "agrupamento",
       text: "Grupo",
       sort: true,
       style: {

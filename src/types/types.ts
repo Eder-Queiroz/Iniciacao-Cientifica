@@ -1,36 +1,36 @@
 export interface Professor {
-    name: string,
-    email: string
+  nome: string;
+  email: string;
 }
 
 export interface Course {
-    name: string,
-    shift: string,
-    group: string
+  nome: string;
+  turno: string;
+  agrupamento: number;
 }
 
 export interface Classe {
-    course: string,
-    period: string,
-    number_students: string
+  curso_id: string;
+  periodo: number;
+  qtalunos: number;
 }
 
 export interface Subject {
-    subject: string,
-    teacher: string,
-    course: string,
-    period: string,
-    number_classes: string
+  nome: string;
+  professor_id: string;
+  curso_id: string;
+  periodo: number;
+  qtaulas: number;
 }
 
 export interface Restrictions {
-    teacher: string,
-    day: string,
-    time: string
+  professor_id: string;
+  dia: string;
+  periodo: number;
 }
 
 export interface Room {
-    rooms: string,
-    capacity: string,
-    number_computers: string
+  nome: string;
+  capacidade: number;
+  qtdpcs: number;
 }

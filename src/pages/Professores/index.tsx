@@ -5,21 +5,21 @@ import { useState, useEffect } from "react";
 import { Button, InputGroup, InputGroupText } from "reactstrap";
 import { getProfessor, insertProfessor } from "../../api/api";
 import { Professor } from "../../types/types";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 
 function Professores() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState<Professor>({
-    name: "",
+    nome: "",
     email: "",
   });
   const [professor, setProfessor] = useState([]);
   const [status, setStatus] = useState<number>();
 
   const validationProfessor = (data: Professor): boolean => {
-    const { name, email } = data;
+    const { nome, email } = data;
 
-    if (!name || !email) {
+    if (!nome || !email) {
       return false;
     }
     return true;
@@ -27,7 +27,10 @@ function Professores() {
 
   const insertNewProfessor = async (data: Professor) => {
     const status = await insertProfessor(data);
-    setStatus(status );
+    console.log("\n\n");
+    console.log("status", status);
+    console.log("\n\n");
+    setStatus(status);
     setModal(!modal);
   };
 
@@ -38,7 +41,7 @@ function Professores() {
     };
 
     loadProfessor();
-  }, [professor]);
+  }, []);
 
   const dados = [
     {
@@ -48,7 +51,7 @@ function Professores() {
           <input
             type="text"
             onChange={(e) =>
-              setInfo((prevState) => ({ ...prevState, name: e.target.value }))
+              setInfo((prevState) => ({ ...prevState, nome: e.target.value }))
             }
             className="form-control"
           />
@@ -75,20 +78,19 @@ function Professores() {
     e.preventDefault();
     if (validationProfessor(info)) {
       insertNewProfessor(info);
-      if(status == 200){
-        toast.success(`${info.name} adicionado com sucesso!`);
-      }
-      else{
-        toast.error(`Erro ao adicionar ${info.name}!`);
+      if (status == 200) {
+        toast.success(`${info.nome} adicionado com sucesso!`);
+      } else {
+        toast.error(`Erro ao adicionar ${info.nome}!`);
       }
     } else {
-      toast.warn("Inválido, preencha os campos!")
+      toast.warn("Inválido, preencha os campos!");
     }
   };
 
   const columns = [
     {
-      dataField: "name",
+      dataField: "nome",
       text: "Nome",
       sort: true,
       filter: textFilter({
