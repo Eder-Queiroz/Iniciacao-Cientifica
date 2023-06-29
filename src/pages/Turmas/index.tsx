@@ -18,7 +18,6 @@ function Turmas() {
 
   const [turma, setTurma] = useState([]);
   const [courses, setCourses] = useState<object[]>([]);
-  const [status, setStatus] = useState<number>();
 
   const validationClasse = (data: Classe): boolean => {
     const { curso_id, periodo, qtalunos } = data;
@@ -32,7 +31,11 @@ function Turmas() {
 
   const insertNewTurma = async (data: Classe) => {
     const status = await insertTurma(data);
-    setStatus(status);
+    if (status == 200) {
+      toast.success("Turma adicionada com sucesso!");
+    } else {
+      toast.error("Erro ao adicionar Turma!");
+    }
     setModal(!modal);
   };
 
@@ -57,7 +60,7 @@ function Turmas() {
 
     loadTurma();
     loadCourse();
-  }, []);
+  }, [turma]);
 
   const dados = [
     {
@@ -128,11 +131,6 @@ function Turmas() {
     e.preventDefault();
     if (validationClasse(info)) {
       insertNewTurma(info);
-      if (status == 200) {
-        toast.success("Turma adicionada com sucesso!");
-      } else {
-        toast.error("Erro ao adicionar Turma!");
-      }
     } else {
       toast.warn("Inválido, preencha os campos!");
     }

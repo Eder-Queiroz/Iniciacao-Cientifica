@@ -16,7 +16,6 @@ export default function Cursos() {
   });
 
   const [curso, setCurso] = useState([]);
-  const [status, setStatus] = useState<number>();
 
   const validationCourse = (data: Course): boolean => {
     const { nome, agrupamento, turno } = data;
@@ -30,7 +29,11 @@ export default function Cursos() {
 
   const insertNewCurso = async (data: Course) => {
     const status = await insertCurso(data);
-    setStatus(status);
+    if (status === 200) {
+      toast.success(`${info.nome} adicionado com sucesso!`);
+    } else {
+      toast.error(`Erro ao adicionar ${info.nome}!`);
+    }
     setModal(!modal);
   };
 
@@ -41,7 +44,7 @@ export default function Cursos() {
     };
 
     loadCurso();
-  }, []);
+  }, [curso]);
 
   const dados = [
     {
@@ -102,11 +105,6 @@ export default function Cursos() {
     e.preventDefault();
     if (validationCourse(info)) {
       insertNewCurso(info);
-      if (status == 200) {
-        toast.success(`${info.nome} adicionado com sucesso!`);
-      } else {
-        toast.error(`Erro ao adicionar ${info.nome}!`);
-      }
     } else {
       toast.warn("Inválido, preencha os campos!");
     }

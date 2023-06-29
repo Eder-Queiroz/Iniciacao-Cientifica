@@ -18,7 +18,6 @@ function Restrições() {
 
   const [restriçao, setRestricao] = useState([]);
   const [professors, setProfessors] = useState<object[]>([]);
-  const [status, setStatus] = useState<number>();
 
   const validationRestriction = (data: Restrictions): boolean => {
     const { professor_id, dia, periodo } = data;
@@ -32,7 +31,11 @@ function Restrições() {
 
   const insertNewRestricao = async (data: Restrictions) => {
     const status = await insertRestricao(data);
-    setStatus(status);
+    if (status == 200) {
+      toast.success("Restrição Adicionada com sucesso");
+    } else {
+      toast.error("Erro ao adicionar Restrição");
+    }
     setModal(!modal);
   };
 
@@ -55,7 +58,7 @@ function Restrições() {
 
     loadRestricao();
     loadProfessor();
-  }, []);
+  }, [restriçao]);
 
   const dados = [
     {
@@ -123,11 +126,6 @@ function Restrições() {
     e.preventDefault();
     if (validationRestriction(info)) {
       insertNewRestricao(info);
-      if (status == 200) {
-        toast.success("Restrição Adicionada com sucesso");
-      } else {
-        toast.error("Erro ao adicionar Restrição");
-      }
     } else {
       toast.warn("Inválido, preencha os campos!");
     }

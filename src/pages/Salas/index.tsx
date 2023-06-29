@@ -16,7 +16,6 @@ function Salas() {
   });
 
   const [rooms, setRooms] = useState([]);
-  const [status, setStatus] = useState<number>();
 
   const validationClasse = (data: Room): boolean => {
     const { nome, capacidade, qtdpcs } = data;
@@ -30,7 +29,11 @@ function Salas() {
 
   const insertNewSala = async (data: Room) => {
     const status = await insertSala(data);
-    setStatus(status);
+    if (status == 200) {
+      toast.success("Turma adicionada com sucesso!");
+    } else {
+      toast.error("Erro ao adicionar Turma!");
+    }
     setModal(!modal);
   };
 
@@ -41,7 +44,7 @@ function Salas() {
     };
 
     loadSala();
-  }, []);
+  }, [rooms]);
 
   const dados = [
     {
@@ -96,11 +99,6 @@ function Salas() {
     e.preventDefault();
     if (validationClasse(info)) {
       insertNewSala(info);
-      if (status == 200) {
-        toast.success("Turma adicionada com sucesso!");
-      } else {
-        toast.error("Erro ao adicionar Turma!");
-      }
     } else {
       toast.warn("Inválido, preencha os campos!");
     }

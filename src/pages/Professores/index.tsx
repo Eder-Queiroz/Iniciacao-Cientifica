@@ -14,7 +14,6 @@ function Professores() {
     email: "",
   });
   const [professor, setProfessor] = useState([]);
-  const [status, setStatus] = useState<number>();
 
   const validationProfessor = (data: Professor): boolean => {
     const { nome, email } = data;
@@ -27,10 +26,11 @@ function Professores() {
 
   const insertNewProfessor = async (data: Professor) => {
     const status = await insertProfessor(data);
-    console.log("\n\n");
-    console.log("status", status);
-    console.log("\n\n");
-    setStatus(status);
+    if (status === 200) {
+      toast.success(`${info.nome} adicionado com sucesso!`);
+    } else {
+      toast.error(`Erro ao adicionar ${info.nome}!`);
+    }
     setModal(!modal);
   };
 
@@ -41,7 +41,7 @@ function Professores() {
     };
 
     loadProfessor();
-  }, []);
+  }, [professor]);
 
   const dados = [
     {
@@ -78,11 +78,6 @@ function Professores() {
     e.preventDefault();
     if (validationProfessor(info)) {
       insertNewProfessor(info);
-      if (status == 200) {
-        toast.success(`${info.nome} adicionado com sucesso!`);
-      } else {
-        toast.error(`Erro ao adicionar ${info.nome}!`);
-      }
     } else {
       toast.warn("Inválido, preencha os campos!");
     }

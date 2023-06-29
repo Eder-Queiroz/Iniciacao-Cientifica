@@ -27,7 +27,6 @@ function Disciplinas() {
   const [discplina, setDiscplina] = useState([]);
   const [professors, setProfessors] = useState<object[]>([]);
   const [courses, setCourses] = useState<object[]>([]);
-  const [status, setStatus] = useState<number>();
 
   const validationSubject = (data: Subject): boolean => {
     const { nome, professor_id, curso_id, periodo, qtaulas } = data;
@@ -41,7 +40,11 @@ function Disciplinas() {
 
   const insertNewDisciplina = async (data: Subject) => {
     const status = await insertDisciplina(data);
-    setStatus(status);
+    if (status === 200) {
+      toast.success(`${info.nome} adicionado com sucesso!`);
+    } else {
+      toast.error(`Erro ao adicionar ${info.nome}!`);
+    }
     setModal(!modal);
   };
 
@@ -77,7 +80,7 @@ function Disciplinas() {
     loadDiscplina();
     loadProfessor();
     loadCourse();
-  }, []);
+  }, [discplina]);
 
   const dados = [
     {
@@ -196,11 +199,6 @@ function Disciplinas() {
     e.preventDefault();
     if (validationSubject(info)) {
       insertNewDisciplina(info);
-      if (status == 200) {
-        toast.success(`${info.nome} adicionado com sucesso!`);
-      } else {
-        toast.error(`Erro ao adicionar ${info.nome}!`);
-      }
     } else {
       toast.warn("Inválido, preencha os campos!");
     }
