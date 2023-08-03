@@ -12,15 +12,14 @@ export default function Cursos() {
   const [info, setInfo] = useState<Course>({
     nome: "",
     turno: "matutino",
-    agrupamento: 1,
   });
 
   const [curso, setCurso] = useState([]);
 
   const validationCourse = (data: Course): boolean => {
-    const { nome, agrupamento, turno } = data;
+    const { nome, turno } = data;
 
-    if (!nome || !turno || !agrupamento) {
+    if (!nome || !turno) {
       return false;
     }
 
@@ -80,22 +79,6 @@ export default function Cursos() {
               <option value="integral">Integral</option>
             </Input>
           </InputGroup>
-          <InputGroup className="w-50">
-            <InputGroupText>Grupo</InputGroupText>
-            <Input
-              type="select"
-              onChange={(e) =>
-                setInfo((prevState) => ({
-                  ...prevState,
-                  agrupamento: parseInt(e.target.value),
-                }))
-              }
-            >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </Input>
-          </InputGroup>
         </div>
       ),
     },
@@ -128,15 +111,7 @@ export default function Cursos() {
       text: "Turno",
       sort: true,
       style: {
-        width: "20%",
-      },
-    },
-    {
-      dataField: "agrupamento",
-      text: "Grupo",
-      sort: true,
-      style: {
-        width: "20%",
+        width: "40%",
       },
     },
   ];

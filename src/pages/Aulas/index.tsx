@@ -8,7 +8,7 @@ import Select from "react-select";
 import { Classe } from "../../types/types";
 import { toast } from "react-toastify";
 
-function Turmas() {
+function Aulas() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState<Classe>({
     name: "",
@@ -197,7 +197,7 @@ function Turmas() {
         outline
         style={{ maxWidth: "20%" }}
       >
-        Adicionar turma
+        Adicionar aula
       </Button>
       <TableWithSearch
         data={turma.map((unicaTurma) => ({
@@ -211,7 +211,7 @@ function Turmas() {
       <InsertModal
         open={modal}
         close={() => setModal(!modal)}
-        name={"Turma"}
+        name={"Aulas"}
         dados={dados}
         submit={handleSubmit}
       />
@@ -219,4 +219,4 @@ function Turmas() {
   );
 }
 
-export default Turmas;
+export default Aulas;

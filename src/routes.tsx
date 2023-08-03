@@ -9,6 +9,7 @@ import Professores from "./pages/Professores";
 import Restrições from "./pages/Restrições";
 import Turmas from "./pages/Turmas";
 import Salas from "./pages/Salas";
+import Aulas from "./pages/Aulas";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/turmas",
         element: <Turmas />,
+      },
+      {
+        path: "/aulas",
+        element: <Aulas />,
       },
       {
         path: "/salas",

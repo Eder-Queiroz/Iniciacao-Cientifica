@@ -12,16 +12,12 @@ import {
 import Select from "react-select";
 import { Subject } from "../../types/types";
 import { toast } from "react-toastify";
-import { stat } from "fs";
 
 function Disciplinas() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState<Subject>({
     nome: "",
-    professor_id: "",
-    curso_id: "",
     periodo: 1,
-    qtaulas: 1,
   });
 
   const [discplina, setDiscplina] = useState([]);
@@ -29,9 +25,9 @@ function Disciplinas() {
   const [courses, setCourses] = useState<object[]>([]);
 
   const validationSubject = (data: Subject): boolean => {
-    const { nome, professor_id, curso_id, periodo, qtaulas } = data;
+    const { nome, periodo } = data;
 
-    if (!nome || !professor_id || !curso_id || !periodo || !qtaulas) {
+    if (!nome || !periodo) {
       return false;
     }
 
@@ -101,46 +97,6 @@ function Disciplinas() {
     },
     {
       component: (
-        <InputGroup>
-          <InputGroupText>Professor</InputGroupText>
-          <Select
-            className="basic-single form-control border-select"
-            classNamePrefix="select"
-            defaultValue={professors[0]}
-            isClearable={true}
-            isSearchable={true}
-            name="teacher"
-            options={professors}
-            isOptionDisabled={(option: any) => option.disabled}
-            onChange={(e: any) => {
-              setInfo((prevState) => ({ ...prevState, professor_id: e.value }));
-            }}
-          />
-        </InputGroup>
-      ),
-    },
-    {
-      component: (
-        <InputGroup>
-          <InputGroupText>Curso</InputGroupText>
-          <Select
-            className="basic-single form-control border-select"
-            classNamePrefix="select"
-            defaultValue={courses[0]}
-            isClearable={true}
-            isSearchable={true}
-            name="course"
-            options={courses}
-            isOptionDisabled={(option: any) => option.disabled}
-            onChange={(e: any) => {
-              setInfo((prevState) => ({ ...prevState, curso_id: e.value }));
-            }}
-          />
-        </InputGroup>
-      ),
-    },
-    {
-      component: (
         <div className="d-flex gap-3">
           <InputGroup className="w-50">
             <InputGroupText>Período</InputGroupText>
@@ -164,30 +120,6 @@ function Disciplinas() {
               <option value="8°">8°</option>
               <option value="9°">9°</option>
               <option value="10°">10°</option>
-            </Input>
-          </InputGroup>
-          <InputGroup className="w-50">
-            <InputGroupText>Qtd.Aulas</InputGroupText>
-            <Input
-              type="select"
-              defaultValue="1"
-              onChange={(e) =>
-                setInfo((prevState) => ({
-                  ...prevState,
-                  qtaulas: parseInt(e.target.value),
-                }))
-              }
-            >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
             </Input>
           </InputGroup>
         </div>
@@ -217,15 +149,7 @@ function Disciplinas() {
       }),
       headerClasses: "column-with-filter",
       style: {
-        width: "40%",
-      },
-    },
-    {
-      dataField: "course",
-      text: "Curso",
-      sort: true,
-      style: {
-        width: "20%",
+        width: "60%",
       },
     },
     {
@@ -233,23 +157,7 @@ function Disciplinas() {
       text: "Periodo",
       sort: true,
       style: {
-        width: "10%",
-      },
-    },
-    {
-      dataField: "qtaulas",
-      text: "Qnt. Aulas",
-      sort: true,
-      style: {
-        width: "10%",
-      },
-    },
-    {
-      dataField: "teacher",
-      text: "Professor",
-      sort: true,
-      style: {
-        width: "20%",
+        width: "40%",
       },
     },
   ];

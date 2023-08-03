@@ -6,10 +6,10 @@ export interface Professor {
 export interface Course {
   nome: string;
   turno: string;
-  agrupamento: number;
 }
 
 export interface Classe {
+  name: string;
   curso_id: string;
   periodo: number;
   qtalunos: number;
@@ -17,20 +17,19 @@ export interface Classe {
 
 export interface Subject {
   nome: string;
-  professor_id: string;
-  curso_id: string;
   periodo: number;
-  qtaulas: number;
 }
 
 export interface Restrictions {
   professor_id: string;
   dia: string;
-  periodo: number;
+  periodo: string;
 }
 
 export interface Room {
   nome: string;
   capacidade: number;
-  qtdpcs: number;
+  fixa: boolean;
+  turma_id:string;
+  predio:string;
 }

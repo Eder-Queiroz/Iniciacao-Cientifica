@@ -13,7 +13,7 @@ function Restrições() {
   const [info, setInfo] = useState<Restrictions>({
     professor_id: "",
     dia: "segunda-feira",
-    periodo: 1,
+    periodo: "",
   });
 
   const [restriçao, setRestricao] = useState([]);
@@ -101,20 +101,20 @@ function Restrições() {
             </Input>
           </InputGroup>
           <InputGroup className="w-50">
-            <InputGroupText>Horário</InputGroupText>
+            <InputGroupText>Periodo</InputGroupText>
             <Input
               type="select"
               defaultValue="manhã"
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  periodo: parseInt(e.target.value),
+                  periodo: e.target.value,
                 }))
               }
             >
-              <option value="1">Manhã</option>
-              <option value="2">Tarde</option>
-              <option value="3">Noite</option>
+              <option value="manhã">Manhã</option>
+              <option value="tarde">Tarde</option>
+              <option value="noite">Noite</option>
             </Input>
           </InputGroup>
         </div>
@@ -154,7 +154,7 @@ function Restrições() {
     },
     {
       dataField: "periodo",
-      text: "Horário",
+      text: "Período",
       sort: true,
       style: {
         width: "20%",

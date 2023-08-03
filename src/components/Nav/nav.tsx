@@ -50,6 +50,9 @@ export default function Navigator() {
               <Link to="/salas" className="nav-link">
                 Salas
               </Link>
+              <Link to="/aulas" className="nav-link">
+                aulas
+              </Link>
             </div>
             <Link to="/grade" className="nav-link">
               <Button color="primary">Gerar grade</Button>

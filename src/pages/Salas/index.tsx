@@ -3,28 +3,45 @@ import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
 import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
-import { insertSala, getSala } from "../../api/api";
+import { insertSala, getSala, getTurma } from "../../api/api";
 import { Room } from "../../types/types";
 import { toast } from "react-toastify";
+import Select from "react-select";
 
 function Salas() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState<Room>({
     nome: "",
     capacidade: 1,
-    qtdpcs: 0,
+    fixa: false,
+    turma_id: "",
+    predio: "",
   });
 
   const [rooms, setRooms] = useState([]);
+  const [classe, setClasse] = useState<object[]>([]);
 
   const validationClasse = (data: Room): boolean => {
-    const { nome, capacidade, qtdpcs } = data;
+    const { nome, capacidade, fixa, turma_id, predio } = data;
 
-    if (!nome || !capacidade || !qtdpcs) {
+    if (!nome || !capacidade || !fixa || !turma_id || !predio) {
       return false;
     }
 
     return true;
+  };
+
+  const loadClasse = async () => {
+    const response = await getTurma();
+    const newClasse: object[] = [
+      { value: "none", label: "Selecione um curso", disabled: true },
+    ];
+
+    response.map((classe: any) => {
+      newClasse.push({ value: classe.id, label: classe.nome });
+    });
+
+    setClasse(newClasse);
   };
 
   const insertNewSala = async (data: Room) => {
@@ -50,7 +67,7 @@ function Salas() {
     {
       component: (
         <InputGroup>
-          <InputGroupText>Sala</InputGroupText>
+          <InputGroupText>Nome</InputGroupText>
           <Input
             type="text"
             onChange={(e) =>
@@ -59,6 +76,26 @@ function Salas() {
                 nome: e.target.value,
               }))
             }
+          />
+        </InputGroup>
+      ),
+    },
+    {
+      component: (
+        <InputGroup>
+          <InputGroupText>Turma</InputGroupText>
+          <Select
+            className="basic-single form-control border-select"
+            classNamePrefix="select"
+            defaultValue={classe[0]}
+            isClearable={true}
+            isSearchable={true}
+            name="course"
+            options={classe}
+            isOptionDisabled={(option: any) => option.disabled}
+            onChange={(e: any) => {
+              setInfo((prevState) => ({ ...prevState, turma_id: e.value }));
+            }}
           />
         </InputGroup>
       ),
@@ -79,16 +116,38 @@ function Salas() {
             />
           </InputGroup>
           <InputGroup className="w-50">
-            <InputGroupText>Qdt.Computadores</InputGroupText>
+            <InputGroupText>Predio</InputGroupText>
             <Input
               type="text"
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  qtdpcs: parseInt(e.target.value),
+                  predio: e.target.value,
                 }))
               }
             />
+          </InputGroup>
+        </div>
+      ),
+    },
+    {
+      component: (
+        <div className="d-flex gap-3">
+          <InputGroup className="w-50">
+            <InputGroupText>Fixa</InputGroupText>
+            <Input
+              type="select"
+              defaultValue={0}
+              onChange={(e) =>
+                setInfo((prevState) => ({
+                  ...prevState,
+                  periodo: e.target.value,
+                }))
+              }
+            >
+              <option value={1}>Sim</option>
+              <option value={0}>Não</option>
+            </Input>
           </InputGroup>
         </div>
       ),
@@ -107,14 +166,14 @@ function Salas() {
   const columns = [
     {
       dataField: "nome",
-      text: "Salas",
+      text: "Nome",
       sort: true,
       filter: textFilter({
         className: "filter-table",
       }),
       headerClasses: "column-with-filter",
       style: {
-        width: "60%",
+        width: "50%",
       },
     },
     {
@@ -126,11 +185,27 @@ function Salas() {
       },
     },
     {
-      dataField: "qtdpcs",
-      text: "Quantidade de Computadores",
+      dataField: "turma",
+      text: "Turma",
       sort: true,
       style: {
-        width: "20%",
+        width: "12%",
+      },
+    },
+    {
+      dataField: "predio",
+      text: "Predio",
+      sort: true,
+      style: {
+        width: "12%",
+      },
+    },
+    {
+      dataField: "fixa",
+      text: "Fixa",
+      sort: true,
+      style: {
+        width: "12%",
       },
     },
   ];
