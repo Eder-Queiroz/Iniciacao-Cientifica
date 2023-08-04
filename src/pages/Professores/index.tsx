@@ -4,32 +4,32 @@ import InsertModal from "../../components/InsertModal";
 import { useState, useEffect } from "react";
 import { Button, InputGroup, InputGroupText } from "reactstrap";
 import { getProfessor, insertProfessor } from "../../api/api";
-import { Professor } from "../../types/types";
+import { Teacher } from "../../types/types";
 import { toast } from "react-toastify";
 
 function Professores() {
   const [modal, setModal] = useState(false);
-  const [info, setInfo] = useState<Professor>({
-    nome: "",
+  const [info, setInfo] = useState<Teacher>({
+    name: "",
     email: "",
   });
   const [professor, setProfessor] = useState([]);
 
-  const validationProfessor = (data: Professor): boolean => {
-    const { nome, email } = data;
+  const validationProfessor = (data: Teacher): boolean => {
+    const { name, email } = data;
 
-    if (!nome || !email) {
+    if (!name || !email) {
       return false;
     }
     return true;
   };
 
-  const insertNewProfessor = async (data: Professor) => {
+  const insertNewProfessor = async (data: Teacher) => {
     const status = await insertProfessor(data);
     if (status === 200) {
-      toast.success(`${info.nome} adicionado com sucesso!`);
+      toast.success(`${info.name} adicionado com sucesso!`);
     } else {
-      toast.error(`Erro ao adicionar ${info.nome}!`);
+      toast.error(`Erro ao adicionar ${info.name}!`);
     }
     setModal(!modal);
   };
@@ -41,6 +41,7 @@ function Professores() {
     };
 
     loadProfessor();
+    //console.log(professor);
   }, [professor]);
 
   const dados = [
@@ -51,7 +52,7 @@ function Professores() {
           <input
             type="text"
             onChange={(e) =>
-              setInfo((prevState) => ({ ...prevState, nome: e.target.value }))
+              setInfo((prevState) => ({ ...prevState, name: e.target.value }))
             }
             className="form-control"
           />
@@ -85,7 +86,7 @@ function Professores() {
 
   const columns = [
     {
-      dataField: "nome",
+      dataField: "name",
       text: "Nome",
       sort: true,
       filter: textFilter({

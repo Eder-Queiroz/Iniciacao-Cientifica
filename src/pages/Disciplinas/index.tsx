@@ -3,13 +3,7 @@ import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
 import React, { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
-import {
-  insertDisciplina,
-  getDisciplina,
-  getProfessor,
-  getCurso,
-} from "../../api/api";
-import Select from "react-select";
+import { insertDisciplina, getDisciplina } from "../../api/api";
 import { Subject } from "../../types/types";
 import { toast } from "react-toastify";
 
@@ -21,8 +15,6 @@ function Disciplinas() {
   });
 
   const [discplina, setDiscplina] = useState([]);
-  const [professors, setProfessors] = useState<object[]>([]);
-  const [courses, setCourses] = useState<object[]>([]);
 
   const validationSubject = (data: Subject): boolean => {
     const { nome, periodo } = data;
@@ -44,29 +36,6 @@ function Disciplinas() {
     setModal(!modal);
   };
 
-  const loadProfessor = async () => {
-    const response = await getProfessor();
-    const newProfessors: object[] = [
-      { value: "none", label: "selecione um professor", disabled: true },
-    ];
-    response.map((professor: any) => {
-      newProfessors.push({ value: professor.id, label: professor.nome });
-    });
-    setProfessors(newProfessors);
-  };
-  const loadCourse = async () => {
-    const response = await getCurso();
-    const newCourse: object[] = [
-      { value: "none", label: "Selecione um curso", disabled: true },
-    ];
-
-    response.map((course: any) => {
-      newCourse.push({ value: course.id, label: course.nome });
-    });
-
-    setCourses(newCourse);
-  };
-
   useEffect(() => {
     const loadDiscplina = async () => {
       const response = await getDisciplina();
@@ -74,8 +43,6 @@ function Disciplinas() {
     };
 
     loadDiscplina();
-    loadProfessor();
-    loadCourse();
   }, [discplina]);
 
   const dados = [
@@ -172,16 +139,7 @@ function Disciplinas() {
       >
         Adicionar disciplina
       </Button>
-      <TableWithSearch
-        data={discplina.map((unicaDisciplina) => ({
-          nome: unicaDisciplina["nome"],
-          course: unicaDisciplina["curso"]["nome"],
-          periodo: unicaDisciplina["periodo"],
-          qtaulas: unicaDisciplina["qtaulas"],
-          teacher: unicaDisciplina["professor"]["nome"],
-        }))}
-        columns={columns}
-      />
+      <TableWithSearch data={discplina} columns={columns} />
 
       <InsertModal
         open={modal}

@@ -32,6 +32,7 @@ function Aulas() {
 
   const insertNewTurma = async (data: Classe) => {
     const status = await insertTurma(data);
+    console.log(status);
     if (status == 200) {
       toast.success("Turma adicionada com sucesso!");
     } else {

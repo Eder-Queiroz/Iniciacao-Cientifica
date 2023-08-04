@@ -1,35 +1,53 @@
-export interface Professor {
-  nome: string;
+export interface Teacher {
+  name: string;
   email: string;
 }
 
 export interface Course {
-  nome: string;
-  turno: string;
-}
-
-export interface Classe {
   name: string;
-  curso_id: string;
-  periodo: number;
-  qtalunos: number;
+  shift: string;
 }
 
-export interface Subject {
-  nome: string;
-  periodo: number;
+export interface Class {
+  name: string;
+  course_id: string;
+  period: number;
+  num_students: number;
+}
+
+export interface Discipline {
+  name: string;
+  period: number;
 }
 
 export interface Restrictions {
-  professor_id: string;
-  dia: string;
-  periodo: string;
+  teacher_id: string;
+  day: number;
+  period: string;
 }
 
 export interface Room {
-  nome: string;
-  capacidade: number;
-  fixa: boolean;
-  turma_id:string;
-  predio:string;
+  name: string;
+  capacity: number;
+  fixed: boolean;
+  class_id:string;
+  building:string;
+}
+
+export interface Classroom{
+  amount: number;
+  duration:number;
+  teacher_id: string;
+  discipline_id: string;
+  room_id: string;
+  course_id:string;
+  class_id:string;
+}
+
+export interface Groups{
+  group1:   string;
+  group2:  string;
+  group3:  string;
+  group4:  string;
+  class_id: string;
 }

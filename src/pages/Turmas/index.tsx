@@ -199,14 +199,7 @@ function Turmas() {
       >
         Adicionar turma
       </Button>
-      <TableWithSearch
-        data={turma.map((unicaTurma) => ({
-          curso: unicaTurma["curso"]["nome"],
-          periodo: unicaTurma["periodo"],
-          qtalunos: unicaTurma["qtalunos"],
-        }))}
-        columns={columns}
-      />
+      <TableWithSearch data={turma} columns={columns} />
 
       <InsertModal
         open={modal}
