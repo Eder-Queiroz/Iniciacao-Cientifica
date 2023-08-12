@@ -10,16 +10,17 @@ import { toast } from "react-toastify";
 export default function Cursos() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState<Course>({
-    nome: "",
-    turno: "matutino",
+    name: "",
+    shift: "matutino",
+    grouping:1,
   });
 
   const [curso, setCurso] = useState([]);
 
   const validationCourse = (data: Course): boolean => {
-    const { nome, turno } = data;
+    const { name, shift, grouping } = data;
 
-    if (!nome || !turno) {
+    if (!name || !shift || !grouping) {
       return false;
     }
 
@@ -29,9 +30,9 @@ export default function Cursos() {
   const insertNewCurso = async (data: Course) => {
     const status = await insertCurso(data);
     if (status === 200) {
-      toast.success(`${info.nome} adicionado com sucesso!`);
+      toast.success(`${info.name} adicionado com sucesso!`);
     } else {
-      toast.error(`Erro ao adicionar ${info.nome}!`);
+      toast.error(`Erro ao adicionar ${info.name}!`);
     }
     setModal(!modal);
   };
@@ -53,7 +54,7 @@ export default function Cursos() {
           <Input
             type="text"
             onChange={(e) =>
-              setInfo((prevState) => ({ ...prevState, nome: e.target.value }))
+              setInfo((prevState) => ({ ...prevState, name: e.target.value }))
             }
           />
         </InputGroup>
@@ -69,7 +70,7 @@ export default function Cursos() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  turno: e.target.value,
+                  shift: e.target.value,
                 }))
               }
             >
@@ -77,6 +78,22 @@ export default function Cursos() {
               <option value="vespertino">Vespertino</option>
               <option value="noturno">Noturno</option>
               <option value="integral">Integral</option>
+            </Input>
+          </InputGroup>
+          <InputGroup className="w-50">
+            <InputGroupText>Grupo</InputGroupText>
+            <Input
+              type="select"
+              onChange={(e) =>
+                setInfo((prevState) => ({
+                  ...prevState,
+                  grouping: parseInt(e.target.value),
+                }))
+              }
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
             </Input>
           </InputGroup>
         </div>
@@ -95,7 +112,7 @@ export default function Cursos() {
 
   const columns = [
     {
-      dataField: "nome",
+      dataField: "name",
       text: "Nome",
       sort: true,
       filter: textFilter({
@@ -107,11 +124,19 @@ export default function Cursos() {
       },
     },
     {
-      dataField: "turno",
+      dataField: "shift",
       text: "Turno",
       sort: true,
       style: {
-        width: "40%",
+        width: "20%",
+      },
+    },
+    {
+      dataField: "grouping",
+      text: "Grupo",
+      sort: true,
+      style: {
+        width: "20%",
       },
     },
   ];

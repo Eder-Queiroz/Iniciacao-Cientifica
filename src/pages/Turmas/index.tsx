@@ -5,32 +5,32 @@ import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertTurma, getTurma, getCurso } from "../../api/api";
 import Select from "react-select";
-import { Classe } from "../../types/types";
+import { Class } from "../../types/types";
 import { toast } from "react-toastify";
 
 function Turmas() {
   const [modal, setModal] = useState(false);
-  const [info, setInfo] = useState<Classe>({
+  const [info, setInfo] = useState<Class>({
     name: "",
-    curso_id: "",
-    periodo: 1,
-    qtalunos: 0,
+    course_id: "",
+    period: 1,
+    num_students: 0,
   });
 
   const [turma, setTurma] = useState([]);
   const [courses, setCourses] = useState<object[]>([]);
 
-  const validationClasse = (data: Classe): boolean => {
-    const { curso_id, periodo, qtalunos, name } = data;
+  const validationClass = (data: Class): boolean => {
+    const { course_id, period, num_students, name } = data;
 
-    if (!curso_id || !periodo || !qtalunos || !name) {
+    if (!course_id || !period || !num_students || !name) {
       return false;
     }
 
     return true;
   };
 
-  const insertNewTurma = async (data: Classe) => {
+  const insertNewTurma = async (data: Class) => {
     const status = await insertTurma(data);
     if (status == 200) {
       toast.success("Turma adicionada com sucesso!");
@@ -47,7 +47,7 @@ function Turmas() {
     ];
 
     response.map((course: any) => {
-      newCourse.push({ value: course.id, label: course.nome });
+      newCourse.push({ value: course.id, label: course.name });
     });
 
     setCourses(newCourse);
@@ -91,7 +91,7 @@ function Turmas() {
             options={courses}
             isOptionDisabled={(option: any) => option.disabled}
             onChange={(e: any) => {
-              setInfo((prevState) => ({ ...prevState, curso_id: e.value }));
+              setInfo((prevState) => ({ ...prevState, course_id: e.value }));
             }}
           />
         </InputGroup>
@@ -108,7 +108,7 @@ function Turmas() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  periodo: parseInt(e.target.value),
+                  period: parseInt(e.target.value),
                 }))
               }
             >
@@ -131,7 +131,7 @@ function Turmas() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  qtalunos: parseInt(e.target.value),
+                  num_students: parseInt(e.target.value),
                 }))
               }
             />
@@ -143,7 +143,7 @@ function Turmas() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (validationClasse(info)) {
+    if (validationClass(info)) {
       insertNewTurma(info);
     } else {
       toast.warn("Inválido, preencha os campos!");
@@ -152,19 +152,19 @@ function Turmas() {
 
   const columns = [
     {
-      dataField: "nome",
+      dataField: "name",
       text: "Nome",
       sort: true,
       filter: textFilter({
         className: "filter-table",
       }),
-      headerClasses: "column-with-filter",
+      headerClasss: "column-with-filter",
       style: {
         width: "50%",
       },
     },
     {
-      dataField: "curso",
+      dataField: "course_id",
       text: "Curso",
       sort: true,
       style: {
@@ -172,7 +172,7 @@ function Turmas() {
       },
     },
     {
-      dataField: "periodo",
+      dataField: "period",
       text: "Período",
       sort: true,
       style: {
@@ -180,7 +180,7 @@ function Turmas() {
       },
     },
     {
-      dataField: "qtalunos",
+      dataField: "num_students",
       text: "Quantidade de Alunos",
       sort: true,
       style: {

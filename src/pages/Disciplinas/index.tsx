@@ -4,34 +4,34 @@ import InsertModal from "../../components/InsertModal";
 import React, { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
 import { insertDisciplina, getDisciplina } from "../../api/api";
-import { Subject } from "../../types/types";
+import { Discipline } from "../../types/types";
 import { toast } from "react-toastify";
 
 function Disciplinas() {
   const [modal, setModal] = useState(false);
-  const [info, setInfo] = useState<Subject>({
-    nome: "",
-    periodo: 1,
+  const [info, setInfo] = useState<Discipline>({
+    name: "",
+    period: 1,
   });
 
   const [discplina, setDiscplina] = useState([]);
 
-  const validationSubject = (data: Subject): boolean => {
-    const { nome, periodo } = data;
+  const validationDiscipline = (data: Discipline): boolean => {
+    const { name, period } = data;
 
-    if (!nome || !periodo) {
+    if (!name || !period) {
       return false;
     }
 
     return true;
   };
 
-  const insertNewDisciplina = async (data: Subject) => {
+  const insertNewDisciplina = async (data: Discipline) => {
     const status = await insertDisciplina(data);
     if (status === 200) {
-      toast.success(`${info.nome} adicionado com sucesso!`);
+      toast.success(`${info.name} adicionado com sucesso!`);
     } else {
-      toast.error(`Erro ao adicionar ${info.nome}!`);
+      toast.error(`Erro ao adicionar ${info.name}!`);
     }
     setModal(!modal);
   };
@@ -55,7 +55,7 @@ function Disciplinas() {
             onChange={(e) =>
               setInfo((prevState) => ({
                 ...prevState,
-                nome: e.target.value,
+                name: e.target.value,
               }))
             }
           />
@@ -73,7 +73,7 @@ function Disciplinas() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  periodo: parseInt(e.target.value),
+                  period: parseInt(e.target.value),
                 }))
               }
             >
@@ -96,7 +96,7 @@ function Disciplinas() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (validationSubject(info)) {
+    if (validationDiscipline(info)) {
       insertNewDisciplina(info);
     } else {
       toast.warn("Inválido, preencha os campos!");
@@ -105,7 +105,7 @@ function Disciplinas() {
 
   const columns = [
     {
-      dataField: "nome",
+      dataField: "name",
       text: "Nome",
       sort: true,
       filter: textFilter({
@@ -120,7 +120,7 @@ function Disciplinas() {
       },
     },
     {
-      dataField: "periodo",
+      dataField: "period",
       text: "Periodo",
       sort: true,
       style: {

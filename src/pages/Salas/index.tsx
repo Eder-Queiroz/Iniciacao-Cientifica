@@ -11,20 +11,22 @@ import Select from "react-select";
 function Salas() {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState<Room>({
-    nome: "",
-    capacidade: 1,
-    fixa: false,
-    turma_id: "",
-    predio: "",
+    name: "",
+    capacity: 1,
+    fixed: false,
+    class_id: "",
+    building: "",
   });
 
   const [rooms, setRooms] = useState([]);
   const [classe, setClasse] = useState<object[]>([]);
 
   const validationClasse = (data: Room): boolean => {
-    const { nome, capacidade, fixa, turma_id, predio } = data;
+    const { name, capacity, class_id, building } = data;
 
-    if (!nome || !capacidade || !fixa || !turma_id || !predio) {
+    console.log(data);
+
+    if (!name || !capacity || !class_id || !building) {
       return false;
     }
 
@@ -38,7 +40,7 @@ function Salas() {
     ];
 
     response.map((classe: any) => {
-      newClasse.push({ value: classe.id, label: classe.nome });
+      newClasse.push({ value: classe.id, label: classe.name });
     });
 
     setClasse(newClasse);
@@ -61,6 +63,7 @@ function Salas() {
     };
 
     loadSala();
+    loadClasse();
   }, [rooms]);
 
   const dados = [
@@ -73,7 +76,7 @@ function Salas() {
             onChange={(e) =>
               setInfo((prevState) => ({
                 ...prevState,
-                nome: e.target.value,
+                name: e.target.value,
               }))
             }
           />
@@ -94,7 +97,7 @@ function Salas() {
             options={classe}
             isOptionDisabled={(option: any) => option.disabled}
             onChange={(e: any) => {
-              setInfo((prevState) => ({ ...prevState, turma_id: e.value }));
+              setInfo((prevState) => ({ ...prevState, class_id: e.value }));
             }}
           />
         </InputGroup>
@@ -110,7 +113,7 @@ function Salas() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  capacidade: parseInt(e.target.value),
+                  capacity: parseInt(e.target.value),
                 }))
               }
             />
@@ -122,7 +125,7 @@ function Salas() {
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  predio: e.target.value,
+                  building: e.target.value,
                 }))
               }
             />
@@ -137,16 +140,16 @@ function Salas() {
             <InputGroupText>Fixa</InputGroupText>
             <Input
               type="select"
-              defaultValue={0}
+              defaultValue='0'
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  periodo: e.target.value,
+                  fixed: e.target.value === '1' ? true : false,
                 }))
               }
             >
-              <option value={1}>Sim</option>
-              <option value={0}>Não</option>
+              <option value='1'>Sim</option>
+              <option value='0'>Não</option>
             </Input>
           </InputGroup>
         </div>
@@ -165,7 +168,7 @@ function Salas() {
 
   const columns = [
     {
-      dataField: "nome",
+      dataField: "name",
       text: "Nome",
       sort: true,
       filter: textFilter({
@@ -177,7 +180,7 @@ function Salas() {
       },
     },
     {
-      dataField: "capacidade",
+      dataField: "capacity",
       text: "Capacidade",
       sort: true,
       style: {
@@ -185,7 +188,7 @@ function Salas() {
       },
     },
     {
-      dataField: "turma",
+      dataField: "turma_id",
       text: "Turma",
       sort: true,
       style: {
@@ -193,7 +196,7 @@ function Salas() {
       },
     },
     {
-      dataField: "predio",
+      dataField: "building",
       text: "Predio",
       sort: true,
       style: {
@@ -201,7 +204,7 @@ function Salas() {
       },
     },
     {
-      dataField: "fixa",
+      dataField: "fixed",
       text: "Fixa",
       sort: true,
       style: {

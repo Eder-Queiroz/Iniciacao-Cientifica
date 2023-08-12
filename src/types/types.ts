@@ -6,6 +6,7 @@ export interface Teacher {
 export interface Course {
   name: string;
   shift: string;
+  grouping:number;
 }
 
 export interface Class {

@@ -51,7 +51,7 @@ export default function Navigator() {
                 Salas
               </Link>
               <Link to="/aulas" className="nav-link">
-                aulas
+                Aulas
               </Link>
             </div>
             <Link to="/grade" className="nav-link">
