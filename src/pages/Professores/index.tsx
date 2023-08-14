@@ -1,19 +1,32 @@
 import TableWithSearch from "../../components/TableWithSearch/TableWithSearch";
 import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
+import DeleteModal from "../../components/DeleteModal";
 import { useState, useEffect } from "react";
 import { Button, InputGroup, InputGroupText } from "reactstrap";
-import { getProfessor, insertProfessor } from "../../api/api";
+import {
+  deleteProfessor,
+  getProfessor,
+  insertProfessor,
+  editProfessor,
+} from "../../api/api";
 import { Teacher } from "../../types/types";
 import { toast } from "react-toastify";
+import { FiEdit, FiDelete } from "react-icons/fi";
 
 function Professores() {
   const [modal, setModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [info, setInfo] = useState<Teacher>({
     name: "",
     email: "",
   });
   const [professor, setProfessor] = useState([]);
+  const [id, setId] = useState("");
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+  });
 
   const validationProfessor = (data: Teacher): boolean => {
     const { name, email } = data;
@@ -34,6 +47,48 @@ function Professores() {
     setModal(!modal);
   };
 
+  const handleEditClick = (row: any) => {
+    setId(row.id);
+    setData({
+      name: row.name,
+      email: row.email,
+    });
+    setModal(!modal);
+  };
+
+  const handleDeleteClick = (row: any) => {
+    setId(row.id);
+    setDeleteModal(!deleteModal);
+  };
+
+  const DeleteProfessor = async (id: string) => {
+    const status = await deleteProfessor(id);
+
+    if (status === 200) {
+      toast.success(`Deletado com sucesso!`);
+    } else {
+      toast.error(`Erro ao deletar!`);
+    }
+    setId("");
+    setDeleteModal(!deleteModal);
+  };
+
+  const EditProfessor = async (data: Teacher, id: string) => {
+    const status = await editProfessor(data, id);
+
+    if (status === 200) {
+      toast.success(`Editado com sucesso!`);
+    } else {
+      toast.error(`Erro ao editar!`);
+    }
+    setId("");
+    setData({
+      name: "",
+      email: "",
+    });
+    setModal(!modal);
+  };
+
   useEffect(() => {
     const loadProfessor = async () => {
       const response = await getProfessor();
@@ -41,7 +96,6 @@ function Professores() {
     };
 
     loadProfessor();
-    //console.log(professor);
   }, [professor]);
 
   const dados = [
@@ -51,6 +105,7 @@ function Professores() {
           <InputGroupText>Nome</InputGroupText>
           <input
             type="text"
+            defaultValue={data.name}
             onChange={(e) =>
               setInfo((prevState) => ({ ...prevState, name: e.target.value }))
             }
@@ -65,6 +120,7 @@ function Professores() {
           <InputGroupText>Email</InputGroupText>
           <input
             type="text"
+            defaultValue={data.email}
             onChange={(e) =>
               setInfo((prevState) => ({ ...prevState, email: e.target.value }))
             }
@@ -77,11 +133,33 @@ function Professores() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (validationProfessor(info)) {
-      insertNewProfessor(info);
+    if (id) {
+      if (validationProfessor(info)) {
+        EditProfessor(info, id);
+      } else {
+        toast.warn("Inválido, preencha os campos!");
+      }
     } else {
-      toast.warn("Inválido, preencha os campos!");
+      if (validationProfessor(info)) {
+        insertNewProfessor(info);
+      } else {
+        toast.warn("Inválido, preencha os campos!");
+      }
     }
+  };
+
+  const handleClose = (e: any) => {
+    setId("");
+    setData({
+      name: "",
+      email: "",
+    });
+    setModal(!modal);
+  };
+
+  const handleDelete = (e: any) => {
+    e.preventDefault();
+    DeleteProfessor(id);
   };
 
   const columns = [
@@ -102,7 +180,33 @@ function Professores() {
       text: "Email",
       sort: true,
       style: {
-        width: "40%",
+        width: "30%",
+      },
+    },
+    {
+      dataField: "ações",
+      text: "Ações",
+      isDummyField: true, // Não está vinculado a qualquer campo de dados
+      formatter: (cellContent: any, row: any) => {
+        return (
+          <div>
+            <Button
+              onClick={() => handleEditClick(row)}
+              className="mr-2 noBorderAndColor"
+            >
+              <FiEdit className="text-black" />
+            </Button>
+            <Button
+              onClick={() => handleDeleteClick(row)}
+              className="noBorderAndColor"
+            >
+              <FiDelete className="text-black" />
+            </Button>
+          </div>
+        );
+      },
+      style: {
+        width: "5%",
       },
     },
   ];
@@ -121,10 +225,17 @@ function Professores() {
 
       <InsertModal
         open={modal}
-        close={() => setModal(!modal)}
+        close={handleClose}
         name={"Professor"}
         dados={dados}
         submit={handleSubmit}
+        id={id}
+      />
+      <DeleteModal
+        open={deleteModal}
+        close={() => setDeleteModal(!deleteModal)}
+        name={"Professor"}
+        delete={handleDelete}
       />
     </div>
   );

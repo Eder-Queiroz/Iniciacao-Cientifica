@@ -1,4 +1,4 @@
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 
 function InsertModal(props: any) {
   return (
@@ -8,9 +8,9 @@ function InsertModal(props: any) {
         toggle={props.close}
         modalTransition={{ timeout: 200 }}
       >
-        <ModalHeader
-          toggle={props.close}
-        >{`Adicionar ${props.name}`}</ModalHeader>
+        <ModalHeader toggle={props.close}>
+          {props.id ? `Editar ${props.name}` : `Adicionar ${props.name}`}
+        </ModalHeader>
         <ModalBody>
           <form
             id="form"

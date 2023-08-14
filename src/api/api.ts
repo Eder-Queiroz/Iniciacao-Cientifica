@@ -22,6 +22,24 @@ export const insertProfessor = async (data: object) => {
   }
 };
 
+export const editProfessor = async (data: object, id:string) => {
+  try {
+    const { status } = await api.put(`/teacher/${id}`, data);
+    return status;
+  } catch (error) {
+    console.error("Error while editing professor: ", error);
+  }
+};
+
+export const deleteProfessor = async (id:string) => {
+  try {
+    const { status } = await api.delete(`/teacher/${id}`);
+    return status;
+  } catch (error) {
+    console.error("Error while delete professor: ", error);
+  }
+};
+
 export const getCurso = async () => {
   try {
     const { data } = await api.get("/course");
@@ -37,6 +55,24 @@ export const insertCurso = async (data: object) => {
     return status;
   } catch (error) {
     console.error("Error while insertinng curso: ", error);
+  }
+};
+
+export const editCurso = async (data: object, id:string) => {
+  try {
+    const { status } = await api.put(`/course/${id}`, data);
+    return status;
+  } catch (error) {
+    console.error("Error while editing curso: ", error);
+  }
+};
+
+export const deleteCurso = async (id:string) => {
+  try {
+    const { status } = await api.delete(`/course/${id}`);
+    return status;
+  } catch (error) {
+    console.error("Error while delete curso: ", error);
   }
 };
 
@@ -58,6 +94,24 @@ export const insertDisciplina = async (data: object) => {
   }
 };
 
+export const editDisciplina = async (data: object, id:string) => {
+  try {
+    const { status } = await api.put(`/discipline/${id}`, data);
+    return status;
+  } catch (error) {
+    console.error("Error while editing Disciplina: ", error);
+  }
+};
+
+export const deleteDisciplina = async (id:string) => {
+  try {
+    const { status } = await api.delete(`/discipline/${id}`);
+    return status;
+  } catch (error) {
+    console.error("Error while delete Disciplina: ", error);
+  }
+};
+
 export const getTurma = async () => {
   try {
     const { data } = await api.get("/class");
@@ -76,6 +130,25 @@ export const insertTurma = async (data: object) => {
   }
 };
 
+export const editTurma = async (data: object, id:string) => {
+  try {
+    const { status } = await api.put(`/class/${id}`, data);
+    return status;
+  } catch (error) {
+    console.error("Error while editing Turma: ", error);
+  }
+};
+
+export const deleteTurma = async (id:string) => {
+  try {
+    const { status } = await api.delete(`/class/${id}`);
+    return status;
+  } catch (error) {
+    console.error("Error while delete Turma: ", error);
+  }
+};
+
+
 export const getRestricao = async () => {
   try {
     const { data } = await api.get("/restriction");
@@ -91,6 +164,24 @@ export const insertRestricao = async (data: object) => {
     return status;
   } catch (error) {
     console.error("Error while insertinng Restrição: ", error);
+  }
+};
+
+export const editRestricao = async (data: object, id:string) => {
+  try {
+    const { status } = await api.put(`/restriction/${id}`, data);
+    return status;
+  } catch (error) {
+    console.error("Error while editing Restrição: ", error);
+  }
+};
+
+export const deleteRestricao = async (id:string) => {
+  try {
+    const { status } = await api.delete(`/restriction/${id}`);
+    return status;
+  } catch (error) {
+    console.error("Error while delete Restrição: ", error);
   }
 };
 
@@ -112,6 +203,24 @@ export const insertSala = async (data: object) => {
   }
 };
 
+export const editSala = async (data: object, id:string) => {
+  try {
+    const { status } = await api.put(`/room/${id}`, data);
+    return status;
+  } catch (error) {
+    console.error("Error while editing Sala: ", error);
+  }
+};
+
+export const deleteSala = async (id:string) => {
+  try {
+    const { status } = await api.delete(`/room/${id}`);
+    return status;
+  } catch (error) {
+    console.error("Error while delete Sala: ", error);
+  }
+};
+
 export const getAula = async () => {
   try {
     const { data } = await api.get("/classroom");
@@ -127,6 +236,24 @@ export const insertAula = async (data: object) => {
     return status;
   } catch (error) {
     console.error("Error while inserting sala: ", error);
+  }
+};
+
+export const editAula = async (data: object, id:string) => {
+  try {
+    const { status } = await api.put(`/classroom/${id}`, data);
+    return status;
+  } catch (error) {
+    console.error("Error while editing Aula: ", error);
+  }
+};
+
+export const deleteAula = async (id:string) => {
+  try {
+    const { status } = await api.delete(`/classroom/${id}`);
+    return status;
+  } catch (error) {
+    console.error("Error while delete Aula: ", error);
   }
 };
 
