@@ -3,10 +3,18 @@ import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
 import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
-import { insertTurma, getTurma, getCurso } from "../../api/api";
+import {
+  insertTurma,
+  getTurma,
+  getCurso,
+  deleteTurma,
+  editTurma,
+} from "../../api/api";
 import Select from "react-select";
 import { Class } from "../../types/types";
 import { toast } from "react-toastify";
+import { FiEdit, FiDelete } from "react-icons/fi";
+import DeleteModal from "../../components/DeleteModal";
 
 function Turmas() {
   const [modal, setModal] = useState(false);
@@ -16,7 +24,8 @@ function Turmas() {
     period: 1,
     num_students: 0,
   });
-
+  const [id, setId] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
   const [turma, setTurma] = useState([]);
   const [courses, setCourses] = useState<object[]>([]);
 
@@ -37,6 +46,52 @@ function Turmas() {
     } else {
       toast.error("Erro ao adicionar Turma!");
     }
+    setModal(!modal);
+  };
+
+  const handleEditClick = (row: any) => {
+    setId(row.id);
+    setInfo({
+      name: row.name,
+      course_id: row.course_id,
+      period: row.period,
+      num_students: row.num_students,
+    });
+    setModal(!modal);
+  };
+
+  const handleDeleteClick = (row: any) => {
+    setId(row.id);
+    setDeleteModal(!deleteModal);
+  };
+
+  const DeleteTurma = async (id: string) => {
+    const status = await deleteTurma(id);
+
+    if (status === 200) {
+      toast.success(`Deletado com sucesso!`);
+    } else {
+      toast.error(`Erro ao deletar!`);
+    }
+    setId("");
+    setDeleteModal(!deleteModal);
+  };
+
+  const EditTurma = async (data: Class, id: string) => {
+    const status = await editTurma(data, id);
+
+    if (status === 200) {
+      toast.success(`Editado com sucesso!`);
+    } else {
+      toast.error(`Erro ao editar!`);
+    }
+    setId("");
+    setInfo({
+      name: "",
+      course_id: "",
+      period: 1,
+      num_students: 0,
+    });
     setModal(!modal);
   };
 
@@ -70,6 +125,7 @@ function Turmas() {
           <InputGroupText>Nome</InputGroupText>
           <Input
             type="text"
+            defaultValue={info.name}
             onChange={(e) =>
               setInfo((prevState) => ({ ...prevState, name: e.target.value }))
             }
@@ -104,7 +160,7 @@ function Turmas() {
             <InputGroupText>Período</InputGroupText>
             <Input
               type="select"
-              defaultValue="1º"
+              defaultValue={info.period}
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
@@ -128,6 +184,7 @@ function Turmas() {
             <InputGroupText>Qdt.Alunos</InputGroupText>
             <Input
               type="text"
+              defaultValue={info.num_students}
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
@@ -143,11 +200,35 @@ function Turmas() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (validationClass(info)) {
-      insertNewTurma(info);
+    if (id) {
+      if (validationClass(info)) {
+        EditTurma(info, id);
+      } else {
+        toast.warn("Inválido, preencha os campos!");
+      }
     } else {
-      toast.warn("Inválido, preencha os campos!");
+      if (validationClass(info)) {
+        insertNewTurma(info);
+      } else {
+        toast.warn("Inválido, preencha os campos!");
+      }
     }
+  };
+
+  const handleClose = () => {
+    setId("");
+    setInfo({
+      name: "",
+      course_id: "",
+      period: 1,
+      num_students: 0,
+    });
+    setModal(!modal);
+  };
+
+  const handleDelete = (e: any) => {
+    e.preventDefault();
+    DeleteTurma(id);
   };
 
   const columns = [
@@ -187,6 +268,32 @@ function Turmas() {
         width: "15%",
       },
     },
+    {
+      dataField: "ações",
+      text: "Ações",
+      isDummyField: true, // Não está vinculado a qualquer campo de dados
+      formatter: (cellContent: any, row: any) => {
+        return (
+          <div>
+            <Button
+              onClick={() => handleEditClick(row)}
+              className="mr-2 noBorderAndColor"
+            >
+              <FiEdit className="text-black" />
+            </Button>
+            <Button
+              onClick={() => handleDeleteClick(row)}
+              className="noBorderAndColor"
+            >
+              <FiDelete className="text-black" />
+            </Button>
+          </div>
+        );
+      },
+      style: {
+        width: "5%",
+      },
+    },
   ];
 
   return (
@@ -203,13 +310,22 @@ function Turmas() {
 
       <InsertModal
         open={modal}
-        close={() => setModal(!modal)}
+        close={handleClose}
         name={"Turma"}
         dados={dados}
         submit={handleSubmit}
+      />
+      <DeleteModal
+        open={deleteModal}
+        close={() => setDeleteModal(!deleteModal)}
+        name={"Curso"}
+        delete={handleDelete}
       />
     </div>
   );
 }
 
 export default Turmas;
+function validationCourse(info: Class) {
+  throw new Error("Function not implemented.");
+}

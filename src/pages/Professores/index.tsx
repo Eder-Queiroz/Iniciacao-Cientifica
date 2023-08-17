@@ -23,10 +23,6 @@ function Professores() {
   });
   const [professor, setProfessor] = useState([]);
   const [id, setId] = useState("");
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-  });
 
   const validationProfessor = (data: Teacher): boolean => {
     const { name, email } = data;
@@ -49,7 +45,7 @@ function Professores() {
 
   const handleEditClick = (row: any) => {
     setId(row.id);
-    setData({
+    setInfo({
       name: row.name,
       email: row.email,
     });
@@ -82,7 +78,7 @@ function Professores() {
       toast.error(`Erro ao editar!`);
     }
     setId("");
-    setData({
+    setInfo({
       name: "",
       email: "",
     });
@@ -105,7 +101,7 @@ function Professores() {
           <InputGroupText>Nome</InputGroupText>
           <input
             type="text"
-            defaultValue={data.name}
+            defaultValue={info.name}
             onChange={(e) =>
               setInfo((prevState) => ({ ...prevState, name: e.target.value }))
             }
@@ -120,7 +116,7 @@ function Professores() {
           <InputGroupText>Email</InputGroupText>
           <input
             type="text"
-            defaultValue={data.email}
+            defaultValue={info.email}
             onChange={(e) =>
               setInfo((prevState) => ({ ...prevState, email: e.target.value }))
             }
@@ -148,9 +144,9 @@ function Professores() {
     }
   };
 
-  const handleClose = (e: any) => {
+  const handleClose = () => {
     setId("");
-    setData({
+    setInfo({
       name: "",
       email: "",
     });
