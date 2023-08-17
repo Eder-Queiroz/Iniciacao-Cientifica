@@ -3,10 +3,18 @@ import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
 import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
-import { insertSala, getSala, getTurma } from "../../api/api";
+import {
+  insertSala,
+  getSala,
+  getTurma,
+  deleteSala,
+  editSala,
+} from "../../api/api";
 import { Room } from "../../types/types";
 import { toast } from "react-toastify";
 import Select from "react-select";
+import { FiEdit, FiDelete } from "react-icons/fi";
+import DeleteModal from "../../components/DeleteModal";
 
 function Salas() {
   const [modal, setModal] = useState(false);
@@ -17,11 +25,12 @@ function Salas() {
     class_id: "",
     building: "",
   });
-
+  const [id, setId] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [classe, setClasse] = useState<object[]>([]);
 
-  const validationClasse = (data: Room): boolean => {
+  const validationRoom = (data: Room): boolean => {
     const { name, capacity, class_id, building } = data;
 
     console.log(data);
@@ -56,6 +65,54 @@ function Salas() {
     setModal(!modal);
   };
 
+  const handleEditClick = (row: any) => {
+    setId(row.id);
+    setInfo({
+      name: row.name,
+      capacity: row.capacity,
+      fixed: row.fixed,
+      class_id: row.class_id,
+      building: row.building,
+    });
+    setModal(!modal);
+  };
+
+  const handleDeleteClick = (row: any) => {
+    setId(row.id);
+    setDeleteModal(!deleteModal);
+  };
+
+  const DeleteSala = async (id: string) => {
+    const status = await deleteSala(id);
+
+    if (status === 200) {
+      toast.success(`Deletado com sucesso!`);
+    } else {
+      toast.error(`Erro ao deletar!`);
+    }
+    setId("");
+    setDeleteModal(!deleteModal);
+  };
+
+  const EditSala = async (data: Room, id: string) => {
+    const status = await editSala(data, id);
+
+    if (status === 200) {
+      toast.success(`Editado com sucesso!`);
+    } else {
+      toast.error(`Erro ao editar!`);
+    }
+    setId("");
+    setInfo({
+      name: "",
+      capacity: 1,
+      fixed: false,
+      class_id: "",
+      building: "",
+    });
+    setModal(!modal);
+  };
+
   useEffect(() => {
     const loadSala = async () => {
       const response = await getSala();
@@ -73,6 +130,7 @@ function Salas() {
           <InputGroupText>Nome</InputGroupText>
           <Input
             type="text"
+            defaultValue={info.name}
             onChange={(e) =>
               setInfo((prevState) => ({
                 ...prevState,
@@ -110,6 +168,7 @@ function Salas() {
             <InputGroupText>Capacidade</InputGroupText>
             <Input
               type="text"
+              defaultValue={info.capacity}
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
@@ -122,6 +181,7 @@ function Salas() {
             <InputGroupText>Predio</InputGroupText>
             <Input
               type="text"
+              defaultValue={info.building}
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
@@ -140,16 +200,16 @@ function Salas() {
             <InputGroupText>Fixa</InputGroupText>
             <Input
               type="select"
-              defaultValue='0'
+              defaultValue={info.fixed == true ? "1" : "0"}
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
-                  fixed: e.target.value === '1' ? true : false,
+                  fixed: e.target.value === "1" ? true : false,
                 }))
               }
             >
-              <option value='1'>Sim</option>
-              <option value='0'>Não</option>
+              <option value="1">Sim</option>
+              <option value="0">Não</option>
             </Input>
           </InputGroup>
         </div>
@@ -159,11 +219,36 @@ function Salas() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (validationClasse(info)) {
-      insertNewSala(info);
+    if (id) {
+      if (validationRoom(info)) {
+        EditSala(info, id);
+      } else {
+        toast.warn("Inválido, preencha os campos!");
+      }
     } else {
-      toast.warn("Inválido, preencha os campos!");
+      if (validationRoom(info)) {
+        insertNewSala(info);
+      } else {
+        toast.warn("Inválido, preencha os campos!");
+      }
     }
+  };
+
+  const handleClose = () => {
+    setId("");
+    setInfo({
+      name: "",
+      capacity: 1,
+      fixed: false,
+      class_id: "",
+      building: "",
+    });
+    setModal(!modal);
+  };
+
+  const handleDelete = (e: any) => {
+    e.preventDefault();
+    DeleteSala(id);
   };
 
   const columns = [
@@ -188,7 +273,7 @@ function Salas() {
       },
     },
     {
-      dataField: "turma_id",
+      dataField: "class.name",
       text: "Turma",
       sort: true,
       style: {
@@ -211,6 +296,32 @@ function Salas() {
         width: "12%",
       },
     },
+    {
+      dataField: "ações",
+      text: "Ações",
+      isDummyField: true, // Não está vinculado a qualquer campo de dados
+      formatter: (cellContent: any, row: any) => {
+        return (
+          <div>
+            <Button
+              onClick={() => handleEditClick(row)}
+              className="mr-2 noBorderAndColor"
+            >
+              <FiEdit className="text-black" />
+            </Button>
+            <Button
+              onClick={() => handleDeleteClick(row)}
+              className="noBorderAndColor"
+            >
+              <FiDelete className="text-black" />
+            </Button>
+          </div>
+        );
+      },
+      style: {
+        width: "5%",
+      },
+    },
   ];
 
   return (
@@ -227,10 +338,16 @@ function Salas() {
 
       <InsertModal
         open={modal}
-        close={() => setModal(!modal)}
+        close={handleClose}
         name={"Sala"}
         dados={dados}
         submit={handleSubmit}
+      />
+      <DeleteModal
+        open={deleteModal}
+        close={() => setDeleteModal(!deleteModal)}
+        name={"Professor"}
+        delete={handleDelete}
       />
     </div>
   );

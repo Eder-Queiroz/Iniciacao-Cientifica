@@ -3,10 +3,18 @@ import { textFilter } from "react-bootstrap-table2-filter";
 import InsertModal from "../../components/InsertModal";
 import { useState, useEffect } from "react";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
-import { insertRestricao, getRestricao, getProfessor } from "../../api/api";
+import {
+  insertRestricao,
+  getRestricao,
+  getProfessor,
+  deleteRestricao,
+  editRestricao,
+} from "../../api/api";
 import Select from "react-select";
 import { Restrictions } from "../../types/types";
 import { toast } from "react-toastify";
+import { FiEdit, FiDelete } from "react-icons/fi";
+import DeleteModal from "../../components/DeleteModal";
 
 function Restrições() {
   const [modal, setModal] = useState(false);
@@ -15,7 +23,8 @@ function Restrições() {
     day: 1,
     period: "manhã",
   });
-
+  const [id, setId] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
   const [restriçao, setRestricao] = useState([]);
   const [professors, setProfessors] = useState<object[]>([]);
 
@@ -36,6 +45,50 @@ function Restrições() {
     } else {
       toast.error("Erro ao adicionar Restrição");
     }
+    setModal(!modal);
+  };
+
+  const handleEditClick = (row: any) => {
+    setId(row.id);
+    setInfo({
+      teacher_id: row.teacher_id,
+      day: row.day,
+      period: row.period,
+    });
+    setModal(!modal);
+  };
+
+  const handleDeleteClick = (row: any) => {
+    setId(row.id);
+    setDeleteModal(!deleteModal);
+  };
+
+  const DeleteRestrição = async (id: string) => {
+    const status = await deleteRestricao(id);
+
+    if (status === 200) {
+      toast.success(`Deletado com sucesso!`);
+    } else {
+      toast.error(`Erro ao deletar!`);
+    }
+    setId("");
+    setDeleteModal(!deleteModal);
+  };
+
+  const EditRestrição = async (data: Restrictions, id: string) => {
+    const status = await editRestricao(data, id);
+
+    if (status === 200) {
+      toast.success(`Editado com sucesso!`);
+    } else {
+      toast.error(`Erro ao editar!`);
+    }
+    setId("");
+    setInfo({
+      teacher_id: "",
+      day: 1,
+      period: "manhã",
+    });
     setModal(!modal);
   };
 
@@ -88,7 +141,7 @@ function Restrições() {
             <InputGroupText>Dia</InputGroupText>
             <Input
               type="select"
-              defaultValue="segunda-feira"
+              defaultValue={info.day}
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
@@ -107,7 +160,7 @@ function Restrições() {
             <InputGroupText>Periodo</InputGroupText>
             <Input
               type="select"
-              defaultValue="manhã"
+              defaultValue={info.period}
               onChange={(e) =>
                 setInfo((prevState) => ({
                   ...prevState,
@@ -127,16 +180,38 @@ function Restrições() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (validationRestriction(info)) {
-      insertNewRestricao(info);
+    if (id) {
+      if (validationRestriction(info)) {
+        EditRestrição(info, id);
+      } else {
+        toast.warn("Inválido, preencha os campos!");
+      }
     } else {
-      toast.warn("Inválido, preencha os campos!");
+      if (validationRestriction(info)) {
+        insertNewRestricao(info);
+      } else {
+        toast.warn("Inválido, preencha os campos!");
+      }
     }
   };
 
+  const handleClose = () => {
+    setId("");
+    setInfo({
+      teacher_id: "",
+      day: 1,
+      period: "manhã",
+    });
+    setModal(!modal);
+  };
+
+  const handleDelete = (e: any) => {
+    e.preventDefault();
+    DeleteRestrição(id);
+  };
   const columns = [
     {
-      dataField: "teacher_id",
+      dataField: "teacher.name",
       text: "Professor",
       sort: true,
       filter: textFilter({
@@ -163,6 +238,32 @@ function Restrições() {
         width: "20%",
       },
     },
+    {
+      dataField: "ações",
+      text: "Ações",
+      isDummyField: true, // Não está vinculado a qualquer campo de dados
+      formatter: (cellContent: any, row: any) => {
+        return (
+          <div>
+            <Button
+              onClick={() => handleEditClick(row)}
+              className="mr-2 noBorderAndColor"
+            >
+              <FiEdit className="text-black" />
+            </Button>
+            <Button
+              onClick={() => handleDeleteClick(row)}
+              className="noBorderAndColor"
+            >
+              <FiDelete className="text-black" />
+            </Button>
+          </div>
+        );
+      },
+      style: {
+        width: "5%",
+      },
+    },
   ];
 
   return (
@@ -179,10 +280,16 @@ function Restrições() {
 
       <InsertModal
         open={modal}
-        close={() => setModal(!modal)}
+        close={handleClose}
         name={"Restrição"}
         dados={dados}
         submit={handleSubmit}
+      />
+      <DeleteModal
+        open={deleteModal}
+        close={() => setDeleteModal(!deleteModal)}
+        name={"Curso"}
+        delete={handleDelete}
       />
     </div>
   );

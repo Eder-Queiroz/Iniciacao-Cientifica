@@ -245,7 +245,7 @@ function Turmas() {
       },
     },
     {
-      dataField: "course_id",
+      dataField: "course.name",
       text: "Curso",
       sort: true,
       style: {

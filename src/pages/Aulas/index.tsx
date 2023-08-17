@@ -11,10 +11,14 @@ import {
   getDisciplina,
   getSala,
   getTurma,
+  deleteAula,
+  editAula,
 } from "../../api/api";
 import Select from "react-select";
 import { Classroom } from "../../types/types";
 import { toast } from "react-toastify";
+import { FiEdit, FiDelete } from "react-icons/fi";
+import DeleteModal from "../../components/DeleteModal";
 
 function Aulas() {
   const [modal, setModal] = useState(false);
@@ -27,7 +31,8 @@ function Aulas() {
     course_id: "",
     class_id: "",
   });
-
+  const [id, setId] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
   const [aula, setAula] = useState([]);
   const [courses, setCourses] = useState<object[]>([]);
   const [classes, setClasses] = useState<object[]>([]);
@@ -69,6 +74,58 @@ function Aulas() {
     } else {
       toast.error("Erro ao adicionar Aula!");
     }
+    setModal(!modal);
+  };
+
+  const handleEditClick = (row: any) => {
+    setId(row.id);
+    setInfo({
+      amount: row.amount,
+      duration: row.duration,
+      teacher_id: row.teacher_id,
+      discipline_id: row.discipline_id,
+      room_id: row.room_id,
+      course_id: row.course_id,
+      class_id: row.class_id,
+    });
+    setModal(!modal);
+  };
+
+  const handleDeleteClick = (row: any) => {
+    setId(row.id);
+    setDeleteModal(!deleteModal);
+  };
+
+  const DeleteAula = async (id: string) => {
+    const status = await deleteAula(id);
+
+    if (status === 200) {
+      toast.success(`Deletado com sucesso!`);
+    } else {
+      toast.error(`Erro ao deletar!`);
+    }
+    setId("");
+    setDeleteModal(!deleteModal);
+  };
+
+  const EditAula = async (data: Classroom, id: string) => {
+    const status = await editAula(data, id);
+
+    if (status === 200) {
+      toast.success(`Editado com sucesso!`);
+    } else {
+      toast.error(`Erro ao editar!`);
+    }
+    setId("");
+    setInfo({
+      amount: 0,
+      duration: 0,
+      teacher_id: "",
+      discipline_id: "",
+      room_id: "",
+      course_id: "",
+      class_id: "",
+    });
     setModal(!modal);
   };
 
@@ -148,6 +205,7 @@ function Aulas() {
     loadClass();
     loadTeacher();
     loadDiscipline();
+    loadRoom();
   }, [aula]);
 
   const dados = [
@@ -158,8 +216,12 @@ function Aulas() {
             <InputGroupText>Quantidade</InputGroupText>
             <Input
               type="text"
+              defaultValue={info.amount}
               onChange={(e) =>
-                setInfo((prevState) => ({ ...prevState, amount: parseInt(e.target.value) }))
+                setInfo((prevState) => ({
+                  ...prevState,
+                  amount: parseInt(e.target.value),
+                }))
               }
             />
           </InputGroup>
@@ -167,8 +229,12 @@ function Aulas() {
             <InputGroupText>Duração</InputGroupText>
             <Input
               type="text"
+              defaultValue={info.duration}
               onChange={(e) =>
-                setInfo((prevState) => ({ ...prevState, duration: parseInt(e.target.value) }))
+                setInfo((prevState) => ({
+                  ...prevState,
+                  duration: parseInt(e.target.value),
+                }))
               }
             />
           </InputGroup>
@@ -249,7 +315,10 @@ function Aulas() {
             options={disciplines}
             isOptionDisabled={(option: any) => option.disabled}
             onChange={(e: any) => {
-              setInfo((prevState) => ({ ...prevState, discipline_id: e.value }));
+              setInfo((prevState) => ({
+                ...prevState,
+                discipline_id: e.value,
+              }));
             }}
           />
         </InputGroup>
@@ -279,11 +348,38 @@ function Aulas() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (validationClassroom(info)) {
-      insertNewAula(info);
+    if (id) {
+      if (validationClassroom(info)) {
+        EditAula(info, id);
+      } else {
+        toast.warn("Inválido, preencha os campos!");
+      }
     } else {
-      toast.warn("Inválido, preencha os campos!");
+      if (validationClassroom(info)) {
+        insertNewAula(info);
+      } else {
+        toast.warn("Inválido, preencha os campos!");
+      }
     }
+  };
+
+  const handleClose = () => {
+    setId("");
+    setInfo({
+      amount: 0,
+      duration: 0,
+      teacher_id: "",
+      discipline_id: "",
+      room_id: "",
+      course_id: "",
+      class_id: "",
+    });
+    setModal(!modal);
+  };
+
+  const handleDelete = (e: any) => {
+    e.preventDefault();
+    deleteAula(id);
   };
 
   const columns = [
@@ -308,7 +404,7 @@ function Aulas() {
       },
     },
     {
-      dataField: "course_id",
+      dataField: "course.name",
       text: "Curso",
       sort: true,
       style: {
@@ -316,7 +412,7 @@ function Aulas() {
       },
     },
     {
-      dataField: "teacher_id",
+      dataField: "teacher.name",
       text: "Professor",
       sort: true,
       style: {
@@ -324,7 +420,7 @@ function Aulas() {
       },
     },
     {
-      dataField: "discpline_id",
+      dataField: "discipline.name",
       text: "Disciplina",
       sort: true,
       style: {
@@ -332,11 +428,37 @@ function Aulas() {
       },
     },
     {
-      dataField: "room_id",
+      dataField: "room.name",
       text: "Salas",
       sort: true,
       style: {
         width: "20%",
+      },
+    },
+    {
+      dataField: "ações",
+      text: "Ações",
+      isDummyField: true, // Não está vinculado a qualquer campo de dados
+      formatter: (cellContent: any, row: any) => {
+        return (
+          <div>
+            <Button
+              onClick={() => handleEditClick(row)}
+              className="mr-2 noBorderAndColor"
+            >
+              <FiEdit className="text-black" />
+            </Button>
+            <Button
+              onClick={() => handleDeleteClick(row)}
+              className="noBorderAndColor"
+            >
+              <FiDelete className="text-black" />
+            </Button>
+          </div>
+        );
+      },
+      style: {
+        width: "5%",
       },
     },
   ];
@@ -355,10 +477,16 @@ function Aulas() {
 
       <InsertModal
         open={modal}
-        close={() => setModal(!modal)}
+        close={handleClose}
         name={"Aulas"}
         dados={dados}
         submit={handleSubmit}
+      />
+      <DeleteModal
+        open={deleteModal}
+        close={() => setDeleteModal(!deleteModal)}
+        name={"Professor"}
+        delete={handleDelete}
       />
     </div>
   );
